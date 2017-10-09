@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+	<acl>
+		<resources>
+			<resource id="Magento_Backend::admin">
+				<resource id="Magestore_Retailerkittools::Vendor" sortOrder="10" title="Vendor">
+					<resource id="Magestore_Retailerkittools::Vendor_save" sortOrder="10" title="Save Vendor"/>
+					<resource id="Magestore_Retailerkittools::Vendor_delete" sortOrder="20" title="Delete Vendor"/>
+					<resource id="Magestore_Retailerkittools::Vendor_update" sortOrder="30" title="Update Vendor"/>
+					<resource id="Magestore_Retailerkittools::Vendor_view" sortOrder="40" title="View Vendor"/>
+				</resource>
+			</resource>
+		</resources>
+	</acl>
+</config>

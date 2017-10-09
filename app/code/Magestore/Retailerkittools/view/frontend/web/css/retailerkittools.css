@@ -1,0 +1,193 @@
+h1{
+    text-align: center;
+}
+.page-title-wrapper .page-title{display: none;}
+h3, .heading--3 {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: block;
+    font-size: 1.25em;
+    margin-bottom: 0.9em;
+    color: #212b35;
+    line-height: 1.222;
+    font-weight: 700;
+}
+.form-header__heading {
+    float: left;
+}
+.form-header__status {
+    float: right;
+    margin-top: 0.3125em;
+}
+.form-header {
+    border-bottom: 1px solid #dfe3e8;
+    margin-bottom: 1.875em;
+}
+.form-header::after {
+    content: '';
+    display: table;
+    clear: both;
+}
+.form-section{margin-bottom: 1.875em;}
+.step-counter__label, .step-counter .step-counter__label {
+    color: #64737f;
+    display: inline;
+}
+h5, .heading--5 {
+    font-size: 0.875em;
+    margin-bottom: 1.42857em;
+}
+h5, .heading--5 {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: block;
+    margin-bottom: 1.42857em;
+    color: #212b35;
+    font-size: 0.875em;
+    line-height: 1.222;
+    font-weight: 700;
+    font-family: 'ShopifySans', Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.step-counter__dots {
+    margin-left: 0.625em;
+}
+
+.dots-container__dot {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    margin: 0 0.125em;
+    border-radius: 50%;
+    background-color: #dfe3e8;
+}
+.dots-container__dot--active {
+    background-color: #5c6ac4;
+}
+.grid-container {
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+}
+.section-input-field input, [type=text], .section-input-field .validate-select, .section-input-field .input-text{width: 100% !important;}
+.section-input-field .form-control, .section-invoice .form-control, .section-input-field .validate-select, .section-input-field .input-text{height: 45px !important }
+.muted-box-container .icon {
+    width: 3.75em;
+    height: 3.75em;
+}
+.muted-box-container {
+    background: #f4f6f8;
+    border: 1px solid #dfe3e8;
+    border-radius: 5px;
+    padding: 2.8125em 1.875em;
+    text-align: center;
+}
+.file-upload {
+    display: block;
+    width: 100%;
+    margin-top: 0.9375em;
+    border: 1px dashed #919ea9;
+    padding: 0.9375em;
+    line-height: 1;
+}
+.line-item:first-child .line-item__remove {
+    display: none;
+}
+.form-inline.line-item.js-line-item div {
+    margin-bottom: 5px;
+}
+.line-item__add {
+    border-bottom: 1px solid #dfe3e8;
+    padding-bottom: 1.875em;
+    margin-bottom: 1.875em;
+    margin-top: 0.9375em;
+}
+.note-memo textarea{max-width: 100% !important; height: 135px !important;}
+.summary-grid .summary-grid__items{
+    background: #f4f6f8;
+    border: 1px solid #dfe3e8;
+    border-radius: 5px 5px 0 0;
+}
+.summary-grid__items {
+    padding: 0.9375em 1.875em;
+}
+.summary-grid__label{float: left;}
+.summary-grid__value{float: right;}
+.summary-grid__total {
+    background: #000639;
+    padding: 1.5em 1.875em;
+    border-radius: 0 0 5px 5px;
+}
+#EditTaxButton, #reset-calculation{
+        background: none;
+    border: 0;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    color: inherit;
+    -webkit-appearance: none;
+    color: #5c6ac4;
+    text-decoration: underline;
+    margin-left: 30px
+}
+#reset-calculation{line-height: 45px; margin-right: 10px}
+.summary-grid__toggle{
+    display: none;
+}
+#TaxInputContainer{clear: both; padding: 0.9375em 1.875em;}
+.summary-grid__total h5, .summary-grid__total span{color: #fff !important;}
+.total-footer__submit-container{margin-top: 10px}
+.total-footer__submit-container input{float: right;}
+.section-heading{text-align: center;}
+.js-calculator-form .form-section{background-color: #f4f6f8; border: 1px solid #dfe3e8; padding: 1.875em;}
+.calculator-result__header {
+    background-color: #f4f6f8;
+    border-bottom: 1px solid #dfe3e8;
+    padding: 0.9375em;
+    margin-bottom: 0;
+    text-align: center;
+    font-size: 1em;
+    text-transform: uppercase;
+    color: #454f59;
+    font-weight: 700;
+}
+.calculator-result{
+    background-color: #f4f6f8;
+    border: 1px solid #dfe3e8;
+    padding: 0 1.875em 1.875em;
+}
+/*.calculator-paypal-fee{
+    position: absolute !important;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+}*/
+.col-md-4.calculator-result__block {
+        text-align: center;
+    margin-top: 15px;
+    border-right: 1px solid #ccc;
+    height: 105px;
+}
+.col-md-4.calculator-result__block:last-child{
+    border-right: none;
+}
+.calculator-result__block .heading--4{font-size: 1em}
+.calculator-result__value{font-size: 2em; font-weight: bold; color: #1d1b1b;}
+.calculator-paypal-fee .btn-groups{text-align: right;}
+.icon--size-small {
+    width: 40px;
+    height: 40px;
+}
+.section-block{margin-top: 35px}
+.tool-item{border-right: 1px solid #ccc; margin-bottom: 30px; }
+.tool-item:nth-child(3n){border-right: none;}
+.section-upload img.announcement-image{width: 100%}
+.retailerkittools-index-vendors .page-title{border-bottom: 1px solid #ccc;display: inline-block;width: 100%;padding-bottom: 10px;}
+.retailerkittools-index-vendors .pager {float: none;}
+.footer-container{padding: 20px !important; border-top: 1px solid #ccc;position: fixed !important; width: 100%; left: 0; right: 0; bottom: 0;}
+.footer-container a {margin-right: 20px;}
+#vendor_province_id{height: 45px; width: 100%;}
+.form-group button:hover{background:#204d74;}
+button.line-item__remove:hover, button.js-line-item-trigger:hover{background: #ccc}
+.js-line-item-trigger .icon {width: 1.5em; height: 1.5em;}

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+ 
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:Magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="retailerkittools_email_invoice" label="Email Template send invoice" file="retailerkittools/invoice.html" type="html" module="Magestore_Retailerkittools" area="frontend"/>
+    <template id="retailerkittools_email_order" label="Email Template send order" file="retailerkittools/order.html" type="html" module="Magestore_Retailerkittools" area="frontend"/>
+    <template id="retailerkittools_email_label" label="Email Template send shipping label" file="retailerkittools/printlabel.html" type="html" module="Magestore_Retailerkittools" area="frontend"/>
+    <template id="retailerkittools_email_barcode" label="Email Template send barcode" file="retailerkittools/barcode.html" type="html" module="Magestore_Retailerkittools" area="frontend"/>
+</config>

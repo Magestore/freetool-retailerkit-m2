@@ -1,0 +1,217 @@
+<?php 
+	$id = $this->getRequest()->getParam('data');
+  $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+	$invoice = $objectManager->create('\Magestore\Retailerkittools\Model\Invoice')->load($id);  
+	$data = json_decode($invoice->getInvoiceData());
+  $currency = $data->currencies;
+  $countryFactory =$objectManager->create('\Magento\Directory\Model\CountryFactory')->create();
+    $companyData = $data->company;
+    $customerData = $data->customer;
+    $invoiceNumber = $data->invoice_number;
+    $invoiceDate = $data->invoice_date;
+    $items = $data->line_items;
+    $note = $data->notes;
+    $taxRate = $data->tax_rate;
+    $subtotal = $data->subtotal;
+    $grandTotal = $currency.number_format(($subtotal + $taxRate*$subtotal/100), 2, '.', ','); 
+    $tax = $currency.number_format(($taxRate*$subtotal/100), 2, '.', ',');
+    $subtotal = $currency.number_format($subtotal, 2, '.', ',');
+    $logo = $data->company_logo;
+     if($customerData->province_id){
+      $receiverRegion = $objectManager->create('Magento\Directory\Model\Region')->load($customerData->province_id);
+      $receiverProvince = $receiverRegion->getName();
+    }
+    if($companyData->province_id){
+      $companyRegion = $objectManager->create('Magento\Directory\Model\Region')->load($companyData->province_id);
+      $companyProvince = $companyRegion->getName();
+    }
+?>
+<style type="text/css">
+@page {
+    size: auto;  /* auto is the initial value */
+    margin: 0mm; /* this affects the margin in the printer settings */
+  }
+  html {
+    background-color: #FFFFFF;
+    margin: 0px; /* this affects the margin on the HTML before sending to printer */
+  }
+  body {
+    margin: 10mm 15mm 10mm 15mm; /* margin you want for the content */
+  }
+body, button, input, select, table, textarea, h5{color: #000}
+.pdf-header {
+    margin-bottom: 45px;
+    border-bottom: 1px solid #dfe3e8;
+}
+.pdf-wrapper::after, .pdf-section::after {
+    content: '';
+    display: table;
+    clear: both;
+}
+img {
+    display: inline-grid;
+}
+.pdf-block, .pdf-section {
+    padding: 30px 0;
+}
+
+.table--horizontal td:first-child, .table--horizontal th:first-child {
+    padding-left: 15px;
+}
+.table.table--horizontal{
+	width: 100%;
+}
+.table.table--horizontal thead{
+	background-color: #ccc;
+}
+.pdf-container {
+    background: #fff;
+    color: #30373b;
+    line-height: 1.6 !important;
+}
+.table--vertical td {
+    padding: 2px 10px;
+}
+.table--horizontal th {
+    border-bottom: 1px solid #dfe3e8;
+    padding: 5px 0;
+}
+.table--horizontal tbody tr {
+    border-bottom: 1px solid rgba(128, 128, 128, 0.32);
+    line-height: 2.5;
+}
+</style>
+<div class="preview preview--bordered" style="padding: 0 20px; color: #000;">
+  <div class="preview__content">
+    
+  <div class="pdf-container">
+  <div class="pdf-header pdf-section">
+    <div class="pdf-section--left" style="width: 50%; float: left; color: #000;">
+      	<h5>Bill from:</h5>
+      	<p>
+      		<?php echo $data->company->company_name ?>
+      	<br>
+      	<?php echo $data->company->company_address ?>
+      	<br>
+      	<?php echo $data->company->company_city ?>,
+      	<?php 
+            if($data->company->province){
+              echo $data->company->province;
+            }else{
+              echo $companyProvince;
+            }
+          ?>,
+        <?php echo $data->company->company_zipcode ?>
+        <br>
+        <?php echo $countryFactory->loadByCode($data->company->country)->getname(); ?>
+      	<br>
+      	<?php echo $data->company->company_email ?>
+      </p>
+    </div>
+    <div class="pdf-section--right" style="width: 50%; float: right; text-align: right; color: #000;">
+      <div class="pdf-section__logo">
+          <img src="<?php echo $logo ?>" alt="Invoice" style="display: block; max-width:200px; max-height:200px; width: auto; height: auto;float: right;">
+      </div>
+    </div>
+  </div>
+
+  <div class="invoice-template__customer pdf-section">
+    <div class="pdf-section--left" style="width: 50%; float: left; color: #000;">
+      <h5>Bill to:</h5>
+      <p>
+      	<?php echo $data->customer->customer_name ?>
+      	<br>
+      	<?php echo $data->customer->address ?>
+      	<br>
+      	<?php echo $data->customer->city ?>,
+      	<?php 
+            if($data->customer->province){
+              echo $data->customer->province;
+            }else{
+              echo $receiverProvince;
+            }
+          ?>, 
+        <?php echo $data->customer->zip ?>
+        <br>
+        <?php echo $countryFactory->loadByCode($data->customer->country)->getName(); ?>
+      	<br>
+      	<?php echo $data->customer->customer_email ?>
+      </p>
+    </div>
+    <div class="pdf-section--right" style="width: 50%; float: right; position: relative; color: #000;text-transform: uppercase;">
+      <table class="table table--vertical invoice-template__table--reference" style="position: absolute; right: 0; color: #000;">
+        <tbody><tr>
+          <td style="text-align: left; width: 150px;font-weight: bold;">Invoice #</td>
+          <td style="text-align: right;"><?php echo $invoiceNumber ?></td>
+        </tr>
+        <tr>
+          <td style="text-align: left;font-weight: bold;">Invoice date</td>
+          <td style="text-align: right;"><?php echo $invoiceDate ?></td>
+        </tr>
+        <tr class="table__row--shaded" style="background-color: rgba(51, 51, 51, 0.11);font-weight: bold;-webkit-print-color-adjust:exact; color: #000;">
+          <td style="text-align: left;">Amount due</td>
+          <td style="text-align: right;"><?php echo $grandTotal ?></td>
+        </tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <div class="invoice-template__line-items pdf-section">
+  <table class="table table--horizontal table--responsive" style="color: #000;">
+    <thead>
+      <tr style="-webkit-print-color-adjust:exact;">
+        <th style="font-weight: bold;">Item</th>
+        <th style="font-weight: bold;">Description</th>
+        <th style="font-weight: bold;">Quantity</th>
+        <th style="font-weight: bold;">Unit Cost</th>
+        <th style="font-weight: bold;">Line Total</th>
+      </tr>
+    </thead>
+    <tbody> 
+    <?php foreach($items as $key => $item):?>      
+        <tr style="<?php if($key%2 == 1) echo 'background-color: rgba(51, 51, 51, 0.11); -webkit-print-color-adjust:exact;' ?>">
+          <td data-label="Item"><?php echo $item->title ?></td>
+          <td data-label="Description" style="word-break: break-all;width: 300px;"><?php echo $item->description ?></td>
+          <td data-label="Quantity"><?php echo $item->quantity ?></td>
+          <td data-label="Unit Cost"><?php echo $currency.number_format($item->price, 2, '.', ',') ?></td>
+          <td data-label="Line Total"><?php echo $currency.number_format($item->amount, 2, '.', ',') ?></td>
+        </tr>
+    <?php endforeach;?>
+    </tbody>
+  </table>
+</div>
+
+<div class="invoice-template__summary pdf-section" style="color: #000;">
+    <div class="pdf-section--left" style="width: 50%; float: left;">
+    <?php if($note):?>
+      <h5>Notes / Memo</h5>
+      <p>
+        <?php echo $note ?>
+      </p>
+  <?php endif; ?>
+    </div>
+	  <div class="pdf-section--right" style="width: 50%; float: right; position: relative;">
+	    <table class="table table--vertical invoice-template__table--summary" style="position: absolute; right: 0;text-transform: uppercase;">
+	      <tbody>
+	      <tr>
+	        <td style="text-align: left; width: 110px;font-weight: bold;">Subtotal</td>
+	        <td style="text-align: right; width: 110px"><?php echo $subtotal ?></td>
+	      </tr>
+	      <tr>
+	        <td style="text-align: left;font-weight: bold;"><?php echo __('Tax (%1)', $taxRate.'%') ?></td>
+	        <td style="text-align: right;"><?php echo $tax ?></td>
+	      </tr>
+	      <tr class="invoice-template__table__total table__row--shaded" style="background-color: rgba(51, 51, 51, 0.11);font-weight: bold;-webkit-print-color-adjust:exact; color: #000;">
+	        <td style="text-align: left;font-weight: bold;">Total</td>
+	        <td style="text-align: right;"><?php echo $grandTotal ?></td>
+	      </tr>
+	    </tbody></table>
+	  </div>
+</div>
+
+</div>
+</div>
+</div>
+<!-- <script type="text/javascript">
+	window.print();
+</script> -->

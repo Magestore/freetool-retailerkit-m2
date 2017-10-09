@@ -1,0 +1,214 @@
+<?php   
+    $companyData = $this->getCompanyData();
+    $vendorData = $this->getVendorData();
+    $receiverData = $this->getReceiverData();
+    $orderNumber = $this->getOrderNumber();
+    $orderDate = $this->getOrderDate();
+    $deliveryDate = $this->getDeliveryDate();
+    $shippingmethod = $this->getShippingMethod();
+    $items = $this->getLineItems();
+    $note = $this->getNote();
+    $taxRate = $this->getTaxRate()*100;
+    $subtotal = $this->getSubtotal();
+    $grandTotal = $this->getGrandTotal();
+    $currency = $this->getCurrency();
+    $tax = $this->getTaxAmount();
+    $logo = $this->getLogo();
+    $shippingterm = $this->getShippingTerms();
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    if($companyData['province_id']){
+      $companyRegion = $objectManager->create('Magento\Directory\Model\Region')
+                        ->load($companyData['province_id']);
+      $companyProvince = $companyRegion->getName();
+    }
+    if($receiverData['province_id']){
+      $receiverRegion = $objectManager->create('Magento\Directory\Model\Region')
+                        ->load($receiverData['province_id']);
+      $receiverProvince = $receiverRegion->getName();
+    }
+    if($vendorData['province_id']){
+      $vendorRegion = $objectManager->create('Magento\Directory\Model\Region')
+                        ->load($vendorData['province_id']);
+      $vendorProvince = $vendorRegion->getName();
+    }
+?>
+<style type="text/css">
+  @page {
+    size: auto;  /* auto is the initial value */
+    margin: 0mm; /* this affects the margin in the printer settings */
+  }
+  html {
+    background-color: #FFFFFF;
+    margin: 0px; /* this affects the margin on the HTML before sending to printer */
+  }
+  body {
+    margin: 10mm 15mm 10mm 15mm; /* margin you want for the content */
+  }
+</style>
+<div class="preview preview--bordered">
+  <div class="preview__content">
+    
+  <div class="pdf-container">
+  <div class="pdf-block pdf-wrapper">
+    <div class="pdf-section--left" style="display: inline-block; float: left; color: #000;">
+      <div class="pdf-section-heading ">
+        <div class="pdf-section__logo pdf-section__logo--small pdf-section--left" style="float: left">
+            <img src="<?php echo $logo ?>" style="display: block; max-width:50px; max-height:50px; width: auto; height: auto;">
+        </div>
+        <h5 class="pdf-section--left" style="color: #000;<?php if($logo) echo "padding-top: 16px; margin-left: 51px;" ?>"><?php echo $companyData['company_name'] ?></h5>
+      </div>
+      <p style="clear: both;">
+          <?php echo $companyData['address'] ?><br>
+          <?php echo $companyData['city'] ?>,
+          <?php 
+            if($companyData['province']){
+              echo $companyData['province'];
+            }else{
+              echo $companyProvince;
+            }
+          ?>, <?php echo $companyData['zipcode'] ?>
+        <br>
+        <?php echo $this->_countryFactory->create()->loadByCode($companyData['country'])->getName(); ?><br>
+        <?php echo $companyData['email'] ?>
+      </p>
+    </div>
+    <div class="pdf-section--right" style="display: inline-block; float: right; color: #000;">
+      <table class="table table--vertical invoice-template__table--reference" style="margin-left: auto; color: #000;text-transform: uppercase;">
+        <tbody><tr>
+          <td style="width: 215px; font-weight: bold;">Purchase order #</td>
+          <td>#<?php echo $orderNumber ?></td>
+        </tr>
+        <tr>
+          <td style="width: 215px; font-weight: bold;"">Purchase order date</td>
+          <td><?php echo $orderDate ?></td>
+        </tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <div class="pdf-block pdf-wrapper" style="clear: both; padding-top: 30px; color: #000;">
+    <div class="pdf-section--left" style="display: inline-block; float: left;">
+      <div class="info-block">
+        <h5 class="pdf-section--left info-block__label" style="float: left; line-height: 1.6; color: #000; margin-top: 2px;">Vendor:</h5>
+        <p class="pdf-section--left info-block__data" style="margin-left: 75px; color: #000;">
+          <?php echo $vendorData['vendor_name'] ?><br>
+            <?php echo $vendorData['address'] ?><br>
+            <?php echo $vendorData['city'] ?>,
+            <?php 
+              if($vendorData['province']){
+                echo $vendorData['province'];
+              }else{
+                echo $vendorProvince;
+              }
+            ?>, 
+            <?php echo $vendorData['zip'] ?>
+          <br>          
+          <?php echo $this->_countryFactory->create()->loadByCode($vendorData['country'])->getName(); ?><br>
+          <?php echo $vendorData['vendor_email'] ?>
+        </p>
+      </div>
+    </div>
+    <div class="pdf-section--right" style="display: inline-block; float: right; color: #000;">
+      <div class="info-block" style="margin-left: auto;">
+        <h5 class="pdf-section--left info-block__label" style="float: left; line-height: 1.6; color: #000; margin-top: 2px;">Ship to:</h5>
+        <p class="pdf-section--left info-block__data" style="margin-left: 75px;">
+          <?php echo $receiverData['company_name'] ?><br>
+            <?php echo $receiverData['address'] ?><br>
+            <?php echo $receiverData['city'] ?>,
+            <?php 
+              if($receiverData['province']){
+                echo $receiverData['province'];
+              }else{
+                echo $receiverProvince;
+              }
+            ?>
+          , <?php echo $receiverData['zipcode'] ?>
+          <br>
+          <?php echo $this->_countryFactory->create()->loadByCode($receiverData['country'])->getName(); ?><br>
+          <?php echo $receiverData['email'] ?>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="pdf-section" style="clear: both; padding-top: 30px;">
+    <table class="table table--horizontal table--responsive" style="width: 100%; color: #000; border-bottom: 1px solid #ccc">
+      <thead>
+        <tr style="-webkit-print-color-adjust:exact;background-color: #ccc;color: #000;font-weight: bold; color: #000;">
+          <th style="padding: 5px 10px; font-weight: bold;">Delivery date</th>
+          <th style="padding: 5px 0; font-weight: bold;">Shipping method</th>
+          <th style="padding: 5px 0; font-weight: bold;">Shipping terms</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td data-label="Delivery date" style="padding: 5px 10px;"><?php echo $deliveryDate ?></td>
+          <td data-label="Shipping method" style="padding: 5px 0;"><?php echo $shippingmethod ?></td>
+          <td data-label="Shipping terms" style="padding: 5px 0;"><?php echo $shippingterm ?></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="invoice-template__line-items pdf-section" style="padding-top: 50px; color: #000;">
+  <table class="table table--horizontal table--responsive" style="width: 100%">
+    <thead>
+      <tr style="-webkit-print-color-adjust:exact;background-color: #ccc;color: #000;font-weight: bold; color: #000;">
+        <th style="padding: 5px 10px; font-weight: bold;">Item</th>
+        <th style="padding: 5px 0; font-weight: bold;">Description</th>
+        <th style="padding: 5px 0; font-weight: bold;">Quantity</th>
+        <th style="padding: 5px 0; font-weight: bold;">Unit Cost</th>
+        <th style="padding: 5px 0; font-weight: bold;">Line Total</th>
+      </tr>
+    </thead>
+    <tbody>
+        <?php foreach($items as $key => $item):?>      
+        <tr style=" color: #000; <?php if($key%2 == 1) echo 'background-color: rgba(51, 51, 51, 0.11); -webkit-print-color-adjust:exact;' ?>">
+          <td data-label="Item" style="padding: 5px 10px;"><?php echo $item['title'] ?></td>
+          <td data-label="Description" style="padding: 5px 0; word-break: break-all;width: 300px;"><?php echo $item['description'] ?></td>
+          <td data-label="Quantity" style="padding: 5px 0;"><?php echo $item['quantity'] ?></td>
+          <td data-label="Unit Cost" style="padding: 5px 0;"><?php echo $currency.number_format($item['price'], 2, '.', ','); ?></td>
+          <td data-label="Line Total" style="padding: 5px 0;"><?php echo $currency.number_format($item['amount'], 2, '.', ','); ?></td>
+        </tr>
+    <?php endforeach;?>
+    </tbody>
+  </table>
+</div>
+
+<div class="invoice-template__summary pdf-section" style="padding-top: 30px; color: #000;">
+  <?php if($note):?>
+    <div class="pdf-section--left">
+      <h5 style="color: #000"> <?php echo __('Notes / Memo') ?></h5>
+      <p>
+        <?php echo $note ?>
+      </p>
+    </div>
+    <?php endif; ?>
+  <div class="pdf-section--right" style="width: 50%; float: right; position: relative; color: #000">
+      <table class="table table--vertical invoice-template__table--summary" style="position: absolute; right: 0; color: #000; text-transform: uppercase;"">
+        <tbody>
+        <tr>
+          <td style="text-align: left; width: 110px;font-weight: bold;">Subtotal</td>
+          <td style="text-align: right; width: 110px"><?php echo $subtotal ?></td>
+        </tr>
+        <tr>
+          <td style="text-align: left;font-weight: bold;"><?php echo __('Tax (%1)', $taxRate.'%') ?></td>
+          <td style="text-align: right;"><?php echo $tax ?></td>
+        </tr>
+        <tr class="invoice-template__table__total table__row--shaded" style="background-color: rgba(51, 51, 51, 0.11);font-weight: bold;-webkit-print-color-adjust:exact; color: #000;">
+          <td style="text-align: left;font-weight: bold;">Total</td>
+          <td style="text-align: right;"><?php echo $grandTotal ?></td>
+        </tr>
+      </tbody></table>
+    </div>
+</div>
+
+</div>
+
+
+  </div>
+  
+</div>
+<script type="text/javascript">
+  window.print();
+</script>

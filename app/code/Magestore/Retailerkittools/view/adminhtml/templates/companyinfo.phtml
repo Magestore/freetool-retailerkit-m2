@@ -1,0 +1,151 @@
+<?php
+	$helper = $this->_retailerkittoolHelper; 
+	$imgPath = $this->getCompanyLogo();
+	$objectManager = \Magento\Framework\App\ObjectManager::getInstance(); 
+	$formKey = $objectManager->get('Magento\Framework\Data\Form\FormKey'); 
+?>
+
+<style type="text/css">
+.label {
+    margin-bottom: -50px;
+    padding-left: 5px;
+    padding-top: 2px;
+    position: absolute;
+    color: #908f8f;    
+    z-index: 99;
+    opacity: 0;
+    font-weight: 100;
+}
+.form-control {
+    height: 100%;
+    padding-bottom: -10px;
+}
+</style>
+<section class="section section--border" id="ToolContent">
+  	<div class="page-width">
+		<div class="form-section">
+         	<div class="section-heading">
+            	<h1 class="section-heading__heading heading--1"><?php echo __('Company Information') ?></h1>
+         	</div>
+      	</div>
+  		<div class="section-block col-md-12">
+	  		<form id="form-validate" action="<?php echo $this->getUrl('retailerkittools/index/savecompanyinfo') ?>" enctype="multipart/form-data"  accept-charset="UTF-8" method="post"> 
+	  		<input name="form_key" type="hidden" value="<?php echo $formKey->getFormKey(); ?>" />  
+	    		<div class="form-section col-md-12">
+	    			<div class="form-header">
+		               <h3 class="form-header__heading">Enter Company information</h3>
+		            </div>
+		      		<div class="section-input-field col-md-8">
+						<div class="form-input-inline col-md-12">
+							<div class="form-group col-md-6">
+								<small class="label" for="input"><?php echo __('Company name') ?></small>
+								<input type="text" name="company[company_name]" id="company_company_name" value="<?php echo $helper->getRetailerKitToolsConfig('company', 'company_name') ?>" class="form-control required-entry" placeholder="<?php echo __('Company name') ?>">
+							</div>
+							<div class="form-group col-md-6">
+								<small class="label" for="input"><?php echo __('Email address') ?></small>
+								<input type="text" name="company[company_email]" id="company_email" value="<?php echo $helper->getRetailerKitToolsConfig('company', 'company_email') ?>" class="form-control required-entry validate-email" placeholder="<?php echo __('Email address') ?>">
+							</div>
+						</div>
+						<div class="form-input-inline col-md-12">
+							<div class="form-group col-md-12">
+								<small class="label" for="input"><?php echo __('Address') ?></small>
+								<input type="text" name="company[company_address]" id="company_company_address" value="<?php echo $helper->getRetailerKitToolsConfig('company', 'company_address') ?>" class="form-control required-entry" placeholder="<?php echo __('Address') ?>">
+							</div>
+						</div>
+						<div class="form-input-inline col-md-12">
+							<div class="form-group col-md-6">
+								<small class="label" for="input"><?php echo __('City') ?></small>
+								<input type="text" name="company[company_city]" id="company_company_city" value="<?php echo $helper->getRetailerKitToolsConfig('company', 'company_city') ?>" class="form-control required-entry" placeholder="<?php echo __('City') ?>">
+							</div>
+							<div class="form-group col-md-6">
+								<small class="label" for="input"><?php echo __('Zip/Postcode') ?></small>
+								<input type="text" name="company[company_zipcode]" id="company_zipcode" value="<?php echo $helper->getRetailerKitToolsConfig('company', 'company_zipcode') ?>" class="form-control required-entry" placeholder="<?php echo __('Zip/Postcode') ?>">
+							</div>
+						</div>
+						<div class="form-input-inline col-md-12">
+							<div class="form-group col-md-6">
+								<small class="label" for="input"><?php echo __('Country') ?></small>
+								<?php echo $this->getCountryHtmlSelect() ?>
+							</div>
+							<div class="form-group col-md-6">
+				                <div class="input-box">
+									<small class="label" for="input"><?php echo __('State/Province') ?></small>
+				                    <select id="company_province_id" name="company[province_id]" title="<?php /* @escapeNotVerified */ echo __('State/Province') ?>" class="validate-select" <?php echo(!$block->getConfig('general/region/display_all')) ? ' disabled="disabled"' : '';?>>
+					                    <option value=""><?php /* @escapeNotVerified */ echo __('Please select a region, state or province.') ?></option>
+					                </select>
+					                <small class="label" for="input"><?php echo __('State/Province') ?></small>
+					                <input type="text" id="company_province" name="company[province]" value="<?php echo $block->escapeHtml($helper->getRetailerKitToolsConfig('company','company_state')) ?>"  title="<?php /* @escapeNotVerified */ echo __('State/Province') ?>" class="input-text <?php /* @escapeNotVerified */ echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('region') ?>"<?php echo(!$block->getConfig('general/region/display_all')) ? ' disabled="disabled"' : '';?>/>
+				                </div>
+							</div>
+						</div>
+					</div>
+					<div class="section-upload col-md-4">
+						<div class="muted-box-container--logo-upload muted-box-container">
+						  <div class="muted-box__content">
+						      <div class="muted-box__icon-container">
+						        <img class="announcement-image" style="max-width:200px; max-height:200px; width: auto; height: auto;" src="<?php echo $imgPath ?>" alt="">
+						      </div>		      
+						          <p><?php echo __('Add your logo by browsing from your device. (allow png, gif, jpeg, jpg)') ?></p>
+						          <input type="file" name="company_logo" class="file-upload" data-parsley-ui-enabled="false">
+
+						  </div>
+						</div>
+					</div> 
+	    		</div>	    		 
+				<div class="section-input-field col-md-12">
+	      			<div class="form-input-inline">
+			  			<div class="form-group col-md-12">
+				      		<button name="button" type="submit" class="btn btn-primary btn-lg pull-right" id="Submit"><?php echo __('Save') ?></button>
+				      	</div>
+				    </div>
+				</div>
+			</form>
+		</div>
+  	</div>
+</section>
+<script type="text/x-magento-init">
+    {
+        "#company_country": {
+            "regionUpdater": {
+                "optionalRegionAllowed": <?php /* @escapeNotVerified */ echo($block->getConfig('general/region/display_all') ? 'true' : 'false'); ?>,
+                "regionListId": "#company_province_id",
+                "regionInputId": "#company_province",
+                "postcodeId": "#company_zipcode",
+                "form": "#form-validate",
+                "regionJson": <?php /* @escapeNotVerified */ echo $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>,
+                "defaultRegion": "<?php /* @escapeNotVerified */ echo $block->getRegionId() ?>",
+                "countriesWithOptionalZip": <?php /* @escapeNotVerified */ echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>
+            }
+        }
+    }
+</script>
+<script type="text/javascript">
+
+require([
+"jquery",
+"mage/calendar",
+'mage/validation'
+], function($){
+    var dataForm = $('#form-validate');
+    var ignore = null;
+
+    dataForm.mage('validation', {
+        ignore: ignore ? ':hidden:not(' + ignore + ')' : ':hidden'
+    }).find('input:text').attr('autocomplete', 'off');
+
+	$('.form-control').each(function(){
+		var el = $(this);
+		if(el.val().length > 0){
+			el.prev('.label').css('opacity','1');
+		}
+		el.keyup(function(e) {
+			if(el.val().length > 0){
+				el.prev('.label').css('opacity','1');
+			}else{
+				el.prev('.label').css('opacity','0');
+			}
+		});
+	});
+});
+
+</script>

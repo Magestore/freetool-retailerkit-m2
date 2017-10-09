@@ -1,0 +1,125 @@
+<?php 
+
+  $id = $this->getRequest()->getParam('data');
+  $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+  $order = $objectManager->create('\Magestore\Retailerkittools\Model\Label')->load($id);  
+  $data = json_decode($order->getLabelData());
+  $countryFactory = $objectManager->create('\Magento\Directory\Model\CountryFactory')->create();
+	$senderData = $data->sender;
+	$receiverData = $data->receiver;
+	$shipping_date = $data->shipping_date;
+	$tracking_number = $data->tracking_number;
+	$weight = $data->weight;
+  $unit = $data->unit_measurement;
+  $imgPath = $this->getCompanyLogo();
+	if($senderData->province_id){
+		$senderRegion = $objectManager->create('Magento\Directory\Model\Region')->load($senderData->province_id);
+		$senderProvince = $senderRegion->getName();
+	}else if($senderData->province){
+    $senderProvince = $senderData->province;
+  }
+
+	if($receiverData->province_id){
+		$receiverRegion = $objectManager->create('Magento\Directory\Model\Region')->load($receiverData->province_id);
+		$receiverProvince = $receiverRegion->getName();
+	}else if($receiverData->province){
+    $receiverProvince = $receiverData->province;
+  }
+?>
+<style type="text/css">
+  @page {
+    size: auto;  /* auto is the initial value */
+    margin: 0mm; /* this affects the margin in the printer settings */
+  }
+  html {
+    background-color: #FFFFFF;
+    margin: 0px; /* this affects the margin on the HTML before sending to printer */
+  }
+  body {
+    margin: 10mm 15mm 10mm 15mm; /* margin you want for the content */
+  }
+  .preview.preview--bordered{
+    border: 1px solid #000;
+    padding: 15px;
+  }
+</style>
+<div class="preview preview--bordered">
+  <div class="preview__content">
+    
+  <div class="pdf-container" style="font-size: 1em">
+  <div class="muted-box__icon-container">
+    <img class="announcement-image" style="display: block; max-width:150px; max-height:150px; width: auto; height: auto;" src="<?php echo $imgPath; ?>" alt="">
+  </div>
+  <div class="pdf-section sender">
+    <div class="pdf-section--left" style="width: 50%; float: left;">
+      <h5>From: <span style="text-transform: capitalize;"><?php echo $senderData->first_name.' '.$senderData->last_name?> </span></h5>
+      <p>
+        <?php echo $senderData->address?><br>
+        <?php echo $senderData->city ?>,
+        <?php if(isset($senderProvince)){
+          echo $senderProvince.',';
+        }
+        ?>
+        <?php echo $senderData->zip ?><br>
+        <?php echo $countryFactory->loadByCode($senderData->country)->getName(); ?><br>
+        <?php echo $senderData->email ?><br>
+      </p>
+    </div>
+    <div class="pdf-section--right shipping-meta" style=" float: right;">
+      <table class="table table--vertical invoice-template__table--reference" style="color: #000;">
+        <tbody>
+          <tr>
+            <td style="text-align: left; width: 100px;">Ship Date:</td>
+            <td style=""><?php echo $shipping_date ?></td>
+          </tr>
+          <tr>
+            <td style="text-align: left;">Weight:</td>
+            <td style=""><?php echo $weight.'('.$unit.')' ?></td>
+          </tr>
+          <tr class="table__row--shaded" style="-webkit-print-color-adjust:exact; color: #000;">
+            <td style="text-align: left;">Tracking #:</td>
+            <td style=""><?php echo $tracking_number ?></td>
+          </tr>
+        </tbody>
+      </table>
+      <img src="<?php echo $this->getBarcodeUrl() ?>" style="display: block; margin: 0 auto; margin-top: 5px;">
+      <!-- <div class="heading--5 pdf__heading">Ship Date: <?php echo $shipping_date ?></div>
+
+        <div class="heading--5 pdf__heading"><?php echo __('Weight: %s (%s)', $weight, $unit) ?></div>
+
+      <div class="tracking-number">
+          Tracking #: <?php echo $tracking_number ?>
+      </div>
+      <img src="<?php echo $this->getBarcodeUrl() ?>" style="display: block; margin: 0 auto;"> -->
+    </div>
+  </div>
+
+  <div class="receiver" style="margin: 0 auto; clear: both; padding-top: 50px; display: inline-block;" id="receiver">
+    <h5 class="pdf-section--left receiver__to">To: <span style="text-transform: capitalize;"><?php echo $receiverData->first_name.' '.$receiverData->last_name ?></span></h5>
+    <p>
+        <?php echo $receiverData->address?><br>
+        <?php echo $receiverData->city ?>,
+        <?php if(isset($receiverProvince)){
+          echo $receiverProvince.',';
+        }
+        ?>
+        <?php echo $receiverData->zip ?><br>
+        <?php echo $countryFactory->loadByCode($receiverData->country)->getName(); ?><br>
+        <?php echo $receiverData->email ?><br>
+    </p>
+  </div>
+</div>
+
+
+  </div>
+
+</div>
+<script type="text/javascript">
+  var receiver = document.getElementById('receiver');
+  var width = receiver.offsetWidth;
+  console.log(width+'px');
+  receiver.style.maxWidth = width+'px';
+  receiver.style.display = 'block';
+  // window.print();
+</script>
+

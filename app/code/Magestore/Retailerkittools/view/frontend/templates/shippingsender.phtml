@@ -1,0 +1,80 @@
+<?php
+	$helper = Mage::helper('retailerkittools'); 
+?>
+<section class="section section--border" id="ToolContent">
+  	<div class="page-width">
+		<div class="form-section">
+         	<div class="section-heading">
+            	<h1 class="section-heading__heading heading--1"><?php echo $this->__('sender Information') ?></h1>
+         	</div>
+      	</div>
+  		<div class="section-block col-md-12">
+	  		<form id="shippingsenderInfoForm" action="<?php echo $this->getUrl('retailerkittools/index/saveshippingsender') ?>" enctype="multipart/form-data"  accept-charset="UTF-8" method="post">   
+	    		<div class="form-section col-md-12">
+		            <div class="form-header">
+		               <h3 class="form-header__heading"><?php echo $this->__('Enter sender information') ?></h3>
+		            </div>
+		            <div class="section-input-field col-md-8">
+				  		<div class="form-input-inline">
+				  			<div class="form-group col-md-6">
+				  				<input type="text" name="sender[first_name]" id="sender_first_name" value="<?php echo $helper->getRetailerKitToolsConfig('shipping_sender','first_name'); ?>" class="form-control required-entry" placeholder="First Name" >
+				  			</div>
+				  			<div class="form-group col-md-6">
+				  			<input type="text" name="sender[last_name]" id="sender_last_name" value="<?php echo $helper->getRetailerKitToolsConfig('shipping_sender','last_name'); ?>" class="form-control required-entry" placeholder="Last Name" >
+				  			</div>
+				  		</div>
+				  		<div class="form-input-inline">
+				  			<div class="form-group col-md-12">
+				  				<input type="text" name="sender[address]" id="sender_address" value="<?php echo $helper->getRetailerKitToolsConfig('shipping_sender','address'); ?>" class="form-control required-entry" placeholder="Address" >
+				  			</div>
+				  		</div>
+				  		<div class="form-input-inline">
+				  			<div class="form-group col-md-6">
+				  				<input type="text" name="sender[zip]" id="sender_zip" value="<?php echo $helper->getRetailerKitToolsConfig('shipping_sender','zipcode'); ?>" class="form-control" placeholder="Zip/postal code" >
+				  			</div>
+				  			<div class="form-group col-md-6">
+				  				<?php echo $this->getCountryHtmlSelect() ?>
+				  			</div>
+				  		</div>
+				   	</div>
+				   	<div class="section-input-field col-md-4">
+				   		<div class="form-input-inline">
+				   			<div class="form-group col-md-12">
+				   				<input type="email" name="sender[email]" id="sender_email" value="<?php echo $helper->getRetailerKitToolsConfig('shipping_sender','email'); ?>" class="form-control required-entry validate-email" placeholder="Your email address" >
+				   			</div>
+				   			<div class="form-group col-md-12">
+				   				<input type="text" name="sender[city]" id="sender_city" value="<?php echo $helper->getRetailerKitToolsConfig('shipping_sender','city'); ?>" class="form-control required-entry" placeholder="City" >
+				   			</div>
+				   			<div class="form-group col-md-12">
+				   				<div class="input-box">
+				                    <select id="sender_province_id" name="sender[province_id]" title="<?php echo Mage::helper('core')->quoteEscape($this->__('State/Province')) ?>" class="validate-select" style="display:none;">
+				                       <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
+				                    </select>
+				                    <script type="text/javascript">
+				                    //<![CDATA[
+				                        $('sender_province_id').setAttribute('defaultValue',  "<?php echo $helper->getRetailerKitToolsConfig('shipping_sender','state_id') ?>");
+				                    //]]>
+				                    </script>
+				                    <input type="text" id="sender_province" name="sender[province]" value="<?php echo $helper->getRetailerKitToolsConfig('shipping_sender','state') ?>"  title="<?php echo Mage::helper('core')->quoteEscape($this->__('State/Province')) ?>" class="input-text <?php echo $this->helper('customer/address')->getAttributeValidationClass('region') ?>" />
+				                </div>
+				   			</div>
+				   		</div>
+				   	</div>
+		        </div>    		 
+				<div class="section-input-field col-md-12">
+	      			<div class="form-input-inline">
+			  			<div class="form-group col-md-12">
+				      		<button name="button" type="submit" class="btn btn-primary btn-lg pull-right" id="Submit"><?php echo $this->__('Save') ?></button>
+				      	</div>
+				    </div>
+				</div>
+			</form>
+		</div>
+  	</div>
+</section>
+<script type="text/javascript">
+//<![CDATA[
+	var customerForm = new VarienForm('shippingsenderInfoForm');
+    new RegionUpdater('sender_country', 'sender_province', 'sender_province_id', <?php echo $this->helper('directory')->getRegionJson() ?>, undefined, 'zip');
+//]]>
+</script>

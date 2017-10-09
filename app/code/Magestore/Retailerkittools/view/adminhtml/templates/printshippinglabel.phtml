@@ -1,0 +1,319 @@
+<?php
+	$helper = $this->_retailerkittoolHelper;
+?>
+<style type="text/css">
+.label {
+    margin-bottom: -50px;
+    padding-left: 5px;
+    padding-top: 2px;
+    position: absolute;
+    color: #908f8f;    
+    z-index: 999;
+    opacity: 0;
+    font-weight: 100;
+}
+.form-control {
+    height: 100%;
+    padding-bottom: -10px;
+}
+.input-group-btn:last-child > .form-control {
+  margin-left: -1px;
+  width: 100%;
+}
+</style>
+<section class="section section--border" id="ToolContent">
+   	<div class="page-width">
+      	<div class="title-section">
+         	<div class="section-heading">
+            	<h1 class="section-heading__heading heading--1"><?php echo __('Shipping Label Maker') ?></h1>
+         	</div>
+      	</div>
+      	<div class="section-block col-md-12 ">
+	      	<form id="form-validate" class="js-form-validate js-submit-async" data-validation-event="Shipping Label" data-tool="shipping label" action="<?php echo $this->getBaseUrl().'retailerkittools/index/shippinglabel' ?>" accept-charset="UTF-8" method="post" novalidate="">
+		        <div class="form-section col-md-12">
+		            <div class="form-header">
+		               <h3 class="form-header__heading"><?php echo __('Enter sender information') ?></h3>
+		               <div class="form-header__status step-counter">
+		                  <span class="step-counter__label heading--5"><?php echo __('Step 1 of 3') ?></span>
+		                  <span class="step-counter__dots dots-container">
+		                  <span class="dots-container__dot dots-container__dot--active"></span>
+		                  <span class="dots-container__dot "></span>
+		                  <span class="dots-container__dot "></span>
+		                  </span>
+		               </div>
+		            </div>
+		            <div class="section-input-field col-md-12">
+				  		<div class="form-input-inline">
+				  			<div class="form-group col-md-4">				
+								<small class="label" for="input"><?php echo __('First Name') ?></small>
+				  				<input type="text" name="sender[first_name]" id="sender_first_name" value="<?php echo $helper->getRetailerKitToolsConfig('shipping_sender','first_name'); ?>" class="form-control required-entry" placeholder="First Name" >
+				  			</div>
+				  			<div class="form-group col-md-4">				
+								<small class="label" for="input"><?php echo __('Last Name') ?></small>
+				  				<input type="text" name="sender[last_name]" id="sender_last_name" value="<?php echo $helper->getRetailerKitToolsConfig('shipping_sender','last_name'); ?>" class="form-control required-entry" placeholder="Last Name" >
+				  			</div>
+				  			<div class="form-group col-md-4">				
+								<small class="label" for="input"><?php echo __('Sender email address') ?></small>
+				   				<input type="email" name="sender[email]" id="sender_email" value="<?php echo $helper->getRetailerKitToolsConfig('shipping_sender','email'); ?>" class="form-control required-entry validate-email" placeholder="Sender email address" >
+				   			</div>
+				  		</div>
+				   	</div>
+				   	<div class="section-input-field col-md-12">
+				  		<div class="form-input-inline">
+				  			<div class="form-group col-md-8">				
+								<small class="label" for="input"><?php echo __('Address') ?></small>
+				  				<input type="text" name="sender[address]" id="sender_address" value="<?php echo $helper->getRetailerKitToolsConfig('shipping_sender','address'); ?>" class="form-control required-entry" placeholder="Address" >
+				  			</div>
+				  			<div class="form-group col-md-4">				
+								<small class="label" for="input"><?php echo __('City') ?></small>
+				   				<input type="text" name="sender[city]" id="sender_city" value="<?php echo $helper->getRetailerKitToolsConfig('shipping_sender','city'); ?>" class="form-control required-entry" placeholder="City" >
+				   			</div>
+				  		</div>
+				   	</div>
+				   	<div class="section-input-field col-md-12">
+				   		<div class="form-input-inline">		
+				  			<div class="form-group col-md-4">				
+								<small class="label" for="input"><?php echo __('Zip/postal code') ?></small>
+				  				<input type="text" name="sender[zip]" id="sender_zip" value="<?php echo $helper->getRetailerKitToolsConfig('shipping_sender','zipcode'); ?>" class="form-control" placeholder="Zip/postal code" >
+				  			</div>
+				  			<div class="form-group col-md-4">				
+								<small class="label" for="input"><?php echo __('Country') ?></small>
+				  				<?php echo $this->getCountryHtmlSelect() ?>
+				  			</div>				   			
+				   			<div class="form-group col-md-4">
+				   				<div class="input-box">	
+				   					<small class="label" for="input"><?php echo __('State/Province') ?></small>
+				                	<select id="sender_province_id" name="sender[province_id]" title="<?php /* @escapeNotVerified */ echo __('State/Province') ?>" class="validate-select" <?php echo(!$block->getConfig('general/region/display_all')) ? ' disabled="disabled"' : '';?>>
+					                    <option value=""><?php /* @escapeNotVerified */ echo __('Please select a region, state or province.') ?></option>
+					                </select>
+					                <small class="label" for="input"><?php echo __('State/Province') ?></small>
+					                <input type="text" id="sender_province" name="sender[province]" value="<?php echo $block->escapeHtml($this->_retailerkittoolHelper->getRetailerKitToolsConfig('shipping_sender','state')) ?>"  title="<?php /* @escapeNotVerified */ echo __('State/Province') ?>" class="input-text <?php /* @escapeNotVerified */ echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('region') ?>"<?php echo(!$block->getConfig('general/region/display_all')) ? ' disabled="disabled"' : '';?>/>
+				                </div>
+				   			</div>
+				   		</div>
+				   	</div>
+		        </div>
+			   	<div class="form-section col-md-12">
+				   	<div class="form-header">
+				   		<h3 class="form-header__heading"><?php echo __('Enter receiver information') ?></h3>
+				   		<div class="form-header__status step-counter">
+				   			<span class="step-counter__label heading--5"><?php echo __('Step 2 of 3') ?></span>
+				   			<span class="step-counter__dots dots-container">
+					   			<span class="dots-container__dot dots-container__dot--active"></span>
+					   			<span class="dots-container__dot dots-container__dot--active"></span>
+					   			<span class="dots-container__dot "></span>
+				   			</span>
+				   		</div>
+				  	</div>
+				  	<div class="section-input-field col-md-12">
+				  		<div class="form-input-inline">
+				  			<div class="form-group col-md-4">				
+								<small class="label" for="input"><?php echo __('First Name') ?></small>
+				  				<input type="text" name="receiver[first_name]" id="receiver_first_name" class="form-control required-entry" placeholder="First Name" >
+				  			</div>
+				  			<div class="form-group col-md-4">				
+								<small class="label" for="input"><?php echo __('Last Name') ?></small>
+				  				<input type="text" name="receiver[last_name]" id="receiver_last_name" class="form-control required-entry" placeholder="Last Name" >
+				  			</div>
+				  			<div class="form-group col-md-4">				
+								<small class="label" for="input"><?php echo __('Receiver email address') ?></small>
+				   				<input type="email" name="receiver[email]" id="receiver_email" class="form-control required-entry validate-email" placeholder="Receiver email address" >
+				   			</div>
+				  		</div>
+				  	</div>
+				  	<div class="section-input-field col-md-12">
+				  		<div class="form-input-inline">
+				  			<div class="form-group col-md-8">				
+								<small class="label" for="input"><?php echo __('Address') ?></small>
+				  				<input type="text" name="receiver[address]" id="receiver_address" class="form-control required-entry" placeholder="Address" >
+				  			</div>
+				  			<div class="form-group col-md-4">				
+								<small class="label" for="input"><?php echo __('City') ?></small>
+				   				<input type="text" name="receiver[city]" id="receiver_city" class="form-control required-entry" placeholder="City" >
+				   			</div>
+				  		</div>
+				   	</div>
+				   	<div class="section-input-field col-md-12">
+				   		<div class="form-input-inline">
+				   			<div class="form-group col-md-4">				
+								<small class="label" for="input"><?php echo __('Zip/postal code') ?></small>
+				  				<input type="text" name="receiver[zip]" id="receiver_zip" class="form-control" placeholder="Zip/postal code" >
+				  			</div>
+				  			<div class="form-group col-md-4">				
+								<small class="label" for="input"><?php echo __('Country') ?></small>
+				  				<?php echo $this->getCountryHtmlSelectForReceiver() ?>
+				  			</div>
+				   			<div class="form-group col-md-4">
+				   				<div class="input-box">	
+				   					<small class="label" for="input"><?php echo __('State/Province') ?></small>
+				                	<select id="receiver_province_id" name="receiver[province_id]" title="<?php /* @escapeNotVerified */ echo __('State/Province') ?>" class="validate-select" <?php echo(!$block->getConfig('general/region/display_all')) ? ' disabled="disabled"' : '';?>>
+					                    <option value=""><?php /* @escapeNotVerified */ echo __('Please select a region, state or province.') ?></option>
+					                </select>
+					                <small class="label" for="input"><?php echo __('State/Province') ?></small>
+					                <input type="text" id="receiver_province" name="receiver[province]" value="<?php echo $block->escapeHtml($block->getRegion()) ?>"  title="<?php /* @escapeNotVerified */ echo __('State/Province') ?>" class="input-text <?php /* @escapeNotVerified */ echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('region') ?>"<?php echo(!$block->getConfig('general/region/display_all')) ? ' disabled="disabled"' : '';?>/>
+				                </div>
+				   			</div>
+				   		</div>
+				   	</div>
+			   	</div>
+			   	<div class="form-section col-md-12">
+				   	<div class="form-header">
+					   	<h3 class="form-header__heading"><?php echo __('Enter shipping information') ?></h3>
+					   	<div class="form-header__status step-counter">
+						   	<span class="step-counter__label heading--5"><?php echo __('Step 3 of 3') ?></span>
+						   	<span class="step-counter__dots dots-container">
+							   	<span class="dots-container__dot dots-container__dot--active"></span>
+							   	<span class="dots-container__dot dots-container__dot--active"></span>
+							   	<span class="dots-container__dot dots-container__dot--active"></span>
+						   	</span>
+					   	</div>
+				   	</div>
+				   	<div class="section-input-field col-md-12">
+					   	<div class="form-input-inline">
+					   		<div class="form-group col-md-4">				
+								<small class="label" for="input"><?php echo __('Shipping date') ?></small>
+						   		<input type="text" name="shipping_date" id="shipping_date" value="<?php echo date("Y-m-d")?>" class="form-control" placeholder="Shipping date" >
+						   	</div>
+						   	<div class="form-group col-md-4">				
+								<small class="label" for="input"><?php echo __('Tracking number') ?></small>
+						   		<input type="text" name="tracking_number" id="tracking_number" class="form-control required-entry" placeholder="Tracking number" >
+						   	</div>
+						   	<div class="form-group col-md-3" style="padding-right: 0">				
+								<small class="label" for="input"><?php echo __('Package weight') ?></small>
+						   		<input type="text" name="weight" id="weight" class="form-control required-entry validate-number" placeholder="Package weight" style="border-radius: 4px 0 0 4px;">
+						   	</div>
+					   		<div class="input-group-btn" style="padding-right: 15px;">
+						      	<select class="form-control" name="unit_measurement" style="border-radius: 0 4px 4px 0;">
+							        <option value="g">g</option>
+							        <option value="kg">kg</option>
+							        <option value="lbs">lbs</option>
+						      	</select>
+						    </div>
+					   	</div>
+					</div>
+			   	</div>
+	   			<div class="form-section col-md-12">
+	   				<input type="submit" name="commit" value="Create shipping label" class="btn btn-primary btn-lg pull-right">
+	   			</div>
+	   		</form>
+	   	</div>
+   	</div>
+</section>
+<script type="text/x-magento-init">
+    {
+        "#sender_country": {
+            "regionUpdater": {
+                "optionalRegionAllowed": <?php /* @escapeNotVerified */ echo($block->getConfig('general/region/display_all') ? 'true' : 'false'); ?>,
+                "regionListId": "#sender_province_id",
+                "regionInputId": "#sender_province",
+                "postcodeId": "#sender_zip",
+                "form": "#form-validate",
+                "regionJson": <?php /* @escapeNotVerified */ echo $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>,
+                "defaultRegion": "<?php /* @escapeNotVerified */ echo $block->getRegionId() ?>",
+                "countriesWithOptionalZip": <?php /* @escapeNotVerified */ echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>
+            }
+        },
+        "#receiver_country": {
+            "regionUpdater": {
+                "optionalRegionAllowed": <?php /* @escapeNotVerified */ echo($block->getConfig('general/region/display_all') ? 'true' : 'false'); ?>,
+                "regionListId": "#receiver_province_id",
+                "regionInputId": "#receiver_province",
+                "postcodeId": "#receiver_zip",
+                "form": "#form-validate",
+                "regionJson": <?php /* @escapeNotVerified */ echo $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>,
+                "defaultRegion": "<?php /* @escapeNotVerified */ //echo $block->getRegionId() ?>",
+                "countriesWithOptionalZip": <?php /* @escapeNotVerified */ echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>
+            }
+        }
+    }
+</script>
+<script type="text/javascript">
+//<![CDATA[
+    // var formId = 'InvoiceGeneratorForm';
+    // var myForm = new VarienForm(formId, true);
+    // var postUrl = '<?php echo $this->getUrl("retailerkittools/index/printinvoice") ?>';
+    // function doAjax() {
+    //     if (myForm.validator.validate()) {
+    //         new Ajax.Updater(
+    //             { success:'formSuccess' }, postUrl, {
+    //                 method:'post',
+    //                 asynchronous:true,
+    //                 evalScripts:false,
+    //                 onComplete:function(request, json) {
+    //                 	if (request.responseText.isJSON()) {
+    //                 var res = request.responseText.evalJSON();
+    //                 var printContents = res.html;
+				//      var originalContents = document.body.innerHTML;
+
+				//      document.body.innerHTML = printContents;
+
+				//      window.print();
+
+				//      document.body.innerHTML = originalContents;
+    //             }
+    //                     // Element.hide(formId);
+    //                     // Element.show('formSuccess');
+    //                 },
+    //                 onLoading:function(request, json){
+    //                     // Element.show('formLoader');
+    //                 },
+    //                 parameters: $(formId).serialize(true),
+    //             }
+    //         );
+    //     }
+    // }
+    
+    // new Event.observe(formId, 'submit', function(e){
+    //     e.stop();
+    //     doAjax();
+    // });
+//]]>
+
+require([
+"jquery",
+"mage/calendar",
+'mage/validation'
+], function($){
+    var dataForm = $('#form-validate');
+    var ignore = null;
+
+    dataForm.mage('validation', {
+        ignore: ignore ? ':hidden:not(' + ignore + ')' : ':hidden'
+    }).find('input:text').attr('autocomplete', 'off');
+
+    // $('button#my-button').click( function() { //can be replaced with any event
+    //     dataForm.validation('isValid'); //validates form and returns boolean
+    // });
+  $('#shipping_date').datepicker({
+       prevText: '&#x3c;zurück', prevStatus: '',
+        prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '',
+        nextText: 'Vor&#x3e;', nextStatus: '',
+        nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '',
+        monthNames: ['Januar','Februar','März','April','Mai','Juni',
+        'Juli','August','September','Oktober','November','Dezember'],
+        monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
+        'Jul','Aug','Sep','Okt','Nov','Dez'],
+        dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
+        dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+        dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+      showMonthAfterYear: false,
+      dateFormat:'yy-mm-dd'
+    } 
+  );
+
+
+	$('.form-control').each(function(){
+		var el = $(this);
+		if(el.val().length > 0){
+			el.prev('.label').css('opacity','1');
+		}
+		el.keyup(function(e) {
+			if(el.val().length > 0){
+				el.prev('.label').css('opacity','1');
+			}else{
+				el.prev('.label').css('opacity','0');
+			}
+		});
+	});
+});
+</script>

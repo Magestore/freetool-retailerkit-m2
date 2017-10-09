@@ -1,0 +1,133 @@
+<?php
+    $helper = $this->_retailerkittoolHelper;
+?>
+<style type="text/css">
+.label {
+    margin-bottom: -50px;
+    padding-left: 5px;
+    padding-top: 2px;
+    position: absolute;
+    color: #908f8f;    
+    z-index: 99;
+    opacity: 0;
+    font-weight: 100;
+}
+.form-control {
+    height: 100%;
+    padding-bottom: -10px;
+}
+</style>
+<section class="section section--border" id="ToolContent">
+  	<div class="page-width">
+		<div class="form-section">
+         	<div class="section-heading">
+            	<h1 class="section-heading__heading heading--1"><?php echo __('Barcode Maker') ?></h1>
+         	</div>
+      	</div>
+        <div class="section-block col-md-2"></div>
+        <div class="section-block col-md-8">
+            <span>Track and organize your products with unique, custom barcodes. Barcode maker is fast and easy to use. Simply enter your email address and the text or data you want to appear along with your barcode and click Submit. In seconds, you can generate a new barcode that you can download and print.</span>
+        </div>
+        <div class="section-block col-md-2"></div>
+  		<!-- <form id="FromCreateBarcode" class="js-form-validate js-submit-async" data-validation-event="Barcode" data-tool="barcode" action="<?php //echo $this->getUrl('retailerkittools/index/barcode') ?>" accept-charset="UTF-8" method="post" novalidate=""> -->
+        <div class="section-block col-md-4"></div>
+  		<div class="section-block col-md-4 calculator-paypal-fee">
+	  		<form id="form-validate" enctype="multipart/form-data"  accept-charset="UTF-8" action="<?php echo $this->getBaseUrl().'retailerkittools/index/barcode' ?>">   
+	    		<div class="form-section col-md-12">
+		      		<div class="section-input-field col-md-12">
+                        <div class="form-input-inline">
+                            <div class="form-group col-md-12">
+                                <small class="label" for="input"><?php echo __('Email') ?></small>
+                                <input type="text" name="email" id="email" value="<?php echo $helper->getRetailerKitToolsConfig('company', 'company_email') ?>" placeholder="Email address" maxlength="30" class="form-control required-entry validate-email">
+                            </div>
+                        </div>
+		      			<div class="form-input-inline">
+				  			<div class="form-group col-md-12">
+                                <small class="label" for="input"><?php echo __('ie. 123456789') ?></small>
+				  				<input type="text" name="query" id="query" placeholder="ie. 123456789" maxlength="30" class="form-control required-entry">
+				  			</div>
+				  		</div>
+		       		</div>
+		       		<div class="section-input-field col-md-12">
+		      			<div class="form-input-inline">
+				  			<div class="form-group col-md-12">
+					      		<!-- <button name="button" type="button" class="btn btn-primary btn-lg pull-right" id="Submit" onclick="createBarcode()">Submit</button> -->
+                                <button name="button" type="submit" class="btn btn-primary btn-lg pull-right" id="Submit">Submit</button>
+					      		<!-- <p class="form-help-text">Generate your barcode</p> -->
+					      	</div>
+					    </div>
+					</div>
+	    		</div>
+			</form>
+		</div>
+        <div class="section-block col-md-4"></div>
+		<!-- <div class="section-upload col-md-4">
+	        <img id="barcode-img" src="" alt="">
+		</div>   -->
+  	</div>
+</section>
+<script type="text/x-magento-init">
+    {
+        "#form-validate": {
+            "validation": {}
+        }
+    }
+</script>
+<script type="text/javascript">
+
+require([
+"jquery",
+"mage/calendar",
+'mage/validation'
+], function($){
+    $('.form-control').each(function(){
+        var el = $(this);
+        if(el.val().length > 0){
+            el.prev('.label').css('opacity','1');
+        }
+        el.keyup(function(e) {
+            if(el.val().length > 0){
+                el.prev('.label').css('opacity','1');
+            }else{
+                el.prev('.label').css('opacity','0');
+            }
+        });
+    });
+});
+
+</script>
+<script type="text/javascript">
+	//<![CDATA[
+    // var postUrl = '<?php echo $this->getUrl("retailerkittools/index/barcode") ?>';
+    // function createBarcode() {
+    //     if (myForm.validator.validate()) {
+    //         new Ajax.Updater(
+    //             { success:'formSuccess' }, postUrl, {
+    //                 method:'post',
+    //                 asynchronous:true,
+    //                 evalScripts:false,
+    //                 onComplete:function(request, json) { 
+    //                 	if (request.responseText.isJSON()) {
+		  //                   var res = request.responseText.evalJSON();
+		  //                   var barcodeimg = res.urlImage;
+		  //                   // console.log(barcodeimg);
+		  //     				// $('barcode-img').src = barcodeimg;
+		  //     				newWindow = window.open(barcodeimg);
+    //                         newWindow.print();
+    //                         // newWindow.close();
+		  //               }
+    //                 },
+    //                 onLoading:function(request, json){
+    //                 },
+    //                 parameters: $(formId).serialize(true),
+    //             }
+    //         );
+    //     }
+    // }
+    
+    // new Event.observe(formId, 'submit', function(e){
+    //     e.stop();
+    //     createBarcode();
+    // });
+    //]]>
+</script>

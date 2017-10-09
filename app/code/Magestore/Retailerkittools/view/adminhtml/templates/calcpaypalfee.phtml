@@ -1,0 +1,102 @@
+<div class="page-width">
+    
+	<div class="section-heading">
+	    <h1 class="section-heading__heading heading--1"><?php echo __('PayPal fee calculator') ?></h1>
+	    <p class="section-heading__subhead heading--2"><?php echo __('This easy calculator will help you save money on hidden PayPal fees') ?></p>
+	</div>
+	<div class="section-block col-md-2"></div>
+	<div class="section-block col-md-8 calculator-paypal-fee">
+		<div class="calculator-form">
+			<form id="form-validate" class="js-form-validate js-calculator-form col-md-12" accept-charset="UTF-8">
+	          	<div class="form-section col-md-12">
+	          		<div class="section-input-field col-md-6">
+							<div class="form-input-inline">
+	  						<div class="form-group col-md-12">
+	            				<input class="form-control required-entry validate-number" placeholder="<?php echo __('Enter an amount ($)') ?>" type="text" name="paypal_fee_calculator[amount]" id="paypal_fee_calculator_amount">
+	            				<label for="paypal_fee_calculator_amount" generated="true" class="mage-error" id="paypal_fee_calculator_amount-error" style="display: none;">Please enter a valid number in this field.</label>
+	            			</div>
+	            		</div>
+	            	</div>
+	            	<div class="section-input-field col-md-6">
+						<div class="form-input-inline">
+	  						<div class="form-group col-md-12">
+	            				<input value="2.9% + 0.30" disabled="disabled" class="form-control" placeholder="<?php echo __('PayPal fees') ?>" type="text" name="paypal_fee_calculator[markup]" id="paypal_fee_calculator_markup">
+	            			</div>
+	        			</div>
+	        		</div>
+	        		<div class="section-input-field col-md-12">
+		      			<div class="form-input-inline">
+				  			<div class="form-group col-md-12 btn-groups">
+				            	<button type="button" name="commit" value="Calculate fees" class="btn btn-primary btn-lg pull-right" onclick="calculatorfee()""><?php echo __('Calculate fees') ?></button>	
+				  				<button name="button" type="button" id="reset-calculation" class="btn btn-default btn-sm " onclick="resetcalculatorfee()"><?php echo __('Reset') ?></button>
+				            </div>
+				        </div>
+		          	</div>
+	          	</div>          	
+			</form>  
+		</div>
+		<div class="calculator-result-wrapper col-md-12">
+		    <div class="calculator-result col-md-12">
+		        <h2 class="calculator-result__header">
+		          <?php echo __('PayPal fee calculator results') ?>
+		        </h2>
+		        <div class="col-md-12 calculator-result__blocks-wrapper">
+		          	<div class="col-md-4 calculator-result__block">
+		            	<h3 class="heading--4"><?php echo __('Total fees') ?></h3>
+		            	<p class="heading--2 calculator-result__value" id="total-fee">-</p>
+		          	</div>
+		          	<div class="col-md-4 calculator-result__block">
+		            	<h3 class="heading--4"><?php echo __('You will receive') ?></h3>
+		            	<p class="heading--2 calculator-result__value" id="amount-receive">-</p>
+		            	<p class="text-minor calculator-result__note" id="amount-receive-text"></p>
+		          	</div>
+		          	<div class="col-md-4 calculator-result__block">
+			            <h3 class="heading--4"><?php echo __('You should ask for') ?></h3>
+			            <p class="heading--2 calculator-result__value" id="amount-ask">-</p>
+			            <p class="text-minor calculator-result__note" id="amount-ask-text"></p>
+		          	</div>
+		        </div>
+		    </div>
+		</div>
+	</div>
+	<div class="section-block col-md-2"></div>
+</div>
+<script type="text/javascript">
+require([
+"jquery",
+'mage/validation'
+], function($){
+	var dataForm = $('#form-validate');
+    dataForm.submit(function(e){  
+    	if(isNaN($('#paypal_fee_calculator_amount').val())){
+    		dataForm.mage('validation', {});
+    	}
+    	e.preventDefault(); 
+    });
+    calculatorfee = function(){
+    	if(isNaN($('#paypal_fee_calculator_amount').val())){ 
+    		$('#paypal_fee_calculator_amount-error').show();
+    		return;
+    	}
+    		$('#paypal_fee_calculator_amount-error').hide();
+    	var amount = Number.parseFloat($('#paypal_fee_calculator_amount').val());
+    	if(!amount) return;
+    	var totalFee = Number(Math.round((amount *0.029 + 0.3)+'e'+2)+'e-'+2);
+    	var amountReceive = amount - totalFee;
+    	var amountAsk = Number(Math.round(((amount + 0.3)/0.971)+'e'+2)+'e-'+2);
+    	$('#total-fee').html('$'+totalFee.toLocaleString());
+    	$('#amount-receive').html('$'+amountReceive.toLocaleString());
+    	$('#amount-receive-text').html('If you invoice for $'+ amount.toLocaleString());
+    	$('#amount-ask').html('$'+amountAsk.toLocaleString());
+    	$('#amount-ask-text').html('if you need $'+ amount.toLocaleString());
+    }
+    resetcalculatorfee = function(){
+    	$('#paypal_fee_calculator_amount').val('');
+    	$('#total-fee').html('-');
+    	$('#amount-receive').html('-');
+    	$('#amount-receive-text').html('');
+    	$('#amount-ask').html('-');
+    	$('#amount-ask-text').html('');
+    }
+});
+</script>

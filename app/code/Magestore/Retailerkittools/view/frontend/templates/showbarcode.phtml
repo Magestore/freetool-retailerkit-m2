@@ -1,0 +1,33 @@
+<?php 
+$barcodeString = $this->getBarcodeString();
+$barcode = $this->getBarcodeImage();
+?>
+<style type="text/css">
+  @page {
+    size: auto;  /* auto is the initial value */
+    margin: 0mm; /* this affects the margin in the printer settings */
+  }
+  html {
+    background-color: #FFFFFF;
+    margin: 0px; /* this affects the margin on the HTML before sending to printer */
+  }
+  body {
+    margin: 10mm 15mm 10mm 15mm; /* margin you want for the content */
+  }
+</style>
+<div class="preview__content" style="margin: 0 auto;">    
+  	<div class="barcode">
+	    <div class="barcode__text" id="barcode__text" style="margin: 0 auto; padding: 0 30px 10px 30px; text-transform: uppercase; font-weight: bold;">
+	      <span class="heading--5 barcode__label" style="margin-right: 30px; float: left;">Barcode #</span>
+	      <span class="heading--5 barcode__number" style="float: right;"><?php echo $barcodeString ?></span>
+	    </div>
+	    <div class="barcode__img" style="text-align: center;">
+    		<img src="<?php echo $barcode ?>" style="margin: 0 auto">
+		</div>
+  	</div>
+</div>
+<script type="text/javascript">
+	var width = document.getElementsByTagName('img')[0].width;
+	document.getElementById('barcode__text').style.width = width+'px';
+  	// window.print();
+</script>

@@ -1,0 +1,34 @@
+<!--@subject Your Barcode @-->
+<!--@vars
+{"htmlescape var=$name":"Recipient Name",
+"htmlescape var=$sendername":"Sender name",
+"var code":"",
+"var balance":"",
+"var status":"Status",
+"htmlescape var=$message":"Message",
+"var expiredat":"Expired At"}
+@-->
+
+<!--@styles
+body,td { background:#FFFFFF; margin:0; padding:0; color:#2f2f2f; font:15px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+pre{ white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word;}
+@-->
+
+<div style="font:15px/1.35em Verdana, Arial, Helvetica, sans-serif;">
+    <table cellspacing="0" cellpadding="0" border="0" width="98%" style="margin-top:10px; font:15px/1.35em Verdana, Arial, Helvetica, sans-serif; margin-bottom:10px;">
+        <tr>
+            <td align="center" valign="top"  style="text-align: center; background: #fff; padding: 30px">
+                <!-- [ header starts here] -->             
+                <!-- [ middle starts here] -->
+                <table cellspacing="0" cellpadding="0" border="0" width="650">
+                    <tr>
+                       <td>Your Barcode is ready!</td>
+                    </tr>
+                    <tr>
+                       <td><a href="{{var url}}">Get your barcode now</a></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>

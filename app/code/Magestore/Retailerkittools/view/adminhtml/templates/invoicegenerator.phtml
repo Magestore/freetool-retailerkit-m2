@@ -1,0 +1,484 @@
+<?php
+	$helper = $this->_retailerkittoolHelper; 
+	$imgPath = $this->getCompanyLogo();
+	$currency_code = $this->getStoreManager()->getStore()->getCurrentCurrencyCode();
+ 	$currencies = $this->getStoreManager()->getStore()->getAvailableCurrencyCodes(true);
+ 	$_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+?>
+<style type="text/css">
+.label {
+    margin-bottom: -50px;
+    padding-left: 5px;
+    padding-top: 2px;
+    position: absolute;
+    color: #908f8f;    
+    z-index: 99;
+    opacity: 0;
+    font-weight: 100;
+}
+.form-control {
+    height: 100%;
+    padding-bottom: -10px;
+}
+</style>
+<div id="GlobalIconSymbols" style="display: none;">
+    <svg xmlns="http://www.w3.org/2000/svg">
+    	<symbol id="add"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path d="M20 0C9 0 0 9 0 20s9 20 20 20 20-9 20-20S31 0 20 0zm0 38c-9.9 0-18-8.1-18-18S10.1 2 20 2s18 8.1 18 18-8.1 18-18 18z"></path><path d="M28 20c0 .5-.5 1-1 1h-6v6.3c0 .6-.5 1-1 1s-1-.4-1-1V21h-6.3c-.6 0-1-.5-1-1s.4-1 1-1H19v-6c0-.5.5-1 1-1s1 .5 1 1v6h6c.5 0 1 .5 1 1z"></path></svg></symbol>
+    </svg>
+</div>
+<section class="section section--border" id="ToolContent">
+  <div class="page-width">
+<div class="title-section">
+  <div class="section-heading">
+    <h1 class="section-heading__heading heading--1"><?php echo __('Fast and easy invoicing') ?></h1>
+</div>
+</div>
+<form id="form-validate" enctype="multipart/form-data" action="<?php echo $this->getBaseUrl().'retailerkittools/index/printinvoice' ?>" accept-charset="UTF-8" method="post" novalidate="">
+<!-- <form id="InvoiceGeneratorForm" enctype="multipart/form-data"  accept-charset="UTF-8" novalidate="">    -->
+	<input name="form_key" type="hidden" value="<?php /* @escapeNotVerified */ echo $block->getFormKey() ?>" />
+<div class="form-section col-md-12">
+	<select name="currencies" id="currencies" style="float: right;" onchange="changeCurrency(this)">
+		<?php foreach ($currencies as $key => $value) { ?>
+			<?php $symbol = $_objectManager->create('Magento\Directory\Model\CurrencyFactory')->create()->load($value)->getCurrencySymbol(); ?>
+			<?php $symbol = $symbol ? $symbol : $value ?>
+			<option value="<?php echo $symbol ?>" <?php if($currency_code == $value) echo "selected" ?>><?php echo $value ?></option>
+		<?php } ?>
+	</select>	
+	<label style="float: right;"><?php echo __('Select Curency: ')?></label>
+</div>
+<div class="form-section col-md-12">
+  	<div class="form-header">
+    	<h3 class="form-header__heading"><?php echo __('Enter your company information') ?></h3>      
+		<div class="form-header__status step-counter">
+		  <span class="step-counter__label heading--5">
+		    <?php echo __('Step 1 of 3') ?>
+		  </span>
+		  <span class="step-counter__dots dots-container">
+		      <span class="dots-container__dot dots-container__dot--active"></span>
+		      <span class="dots-container__dot "></span>
+		      <span class="dots-container__dot "></span>
+		  </span>
+		</div>
+	</div>
+	<div class="section-input-field col-md-8">
+		<div class="form-input-inline col-md-12">
+			<div class="form-group col-md-6">
+				<small class="label" for="input"><?php echo __('Company name') ?></small>
+				<input type="text" name="company[company_name]" id="company_name" value="<?php echo $helper->getRetailerKitToolsConfig('company', 'company_name') ?>" class="form-control required-entry" placeholder="<?php echo __('Company name') ?>">
+			</div>
+			<div class="form-group col-md-6">
+				<small class="label" for="input"><?php echo __('Email address') ?></small>
+				<input type="text" name="company[company_email]" id="company_email" value="<?php echo $helper->getRetailerKitToolsConfig('company', 'company_email') ?>" class="form-control required-entry validate-email" placeholder="<?php echo __('Email address') ?>">
+			</div>
+		</div>
+		<div class="form-input-inline col-md-12">
+			<div class="form-group col-md-12">				
+				<small class="label" for="input"><?php echo __('Address') ?></small>
+				<input type="text" name="company[company_address]" id="company_address" value="<?php echo $helper->getRetailerKitToolsConfig('company', 'company_address') ?>" class="form-control required-entry" placeholder="<?php echo __('Address') ?>">
+			</div>
+		</div>
+		<div class="form-input-inline col-md-12">
+			<div class="form-group col-md-6">				
+				<small class="label" for="input"><?php echo __('City') ?></small>
+				<input type="text" name="company[company_city]" id="company_city" value="<?php echo $helper->getRetailerKitToolsConfig('company', 'company_city') ?>" class="form-control required-entry" placeholder="<?php echo __('City') ?>">
+			</div>
+			<div class="form-group col-md-6">				
+				<small class="label" for="input"><?php echo __('Zip/Postcode') ?></small>
+				<input type="text" name="company[company_zipcode]" id="company_zipcode" value="<?php echo $helper->getRetailerKitToolsConfig('company', 'company_zipcode') ?>" class="form-control required-entry" placeholder="<?php echo __('Zip/Postcode') ?>">
+			</div>
+		</div>
+		<div class="form-input-inline col-md-12">
+			<div class="form-group col-md-6">
+				<small class="label" for="input"><?php echo __('Country') ?></small>
+				<?php echo $this->getCountryHtmlSelect() ?>
+			</div>
+			<div class="form-group col-md-6">
+                <div class="input-box">
+                	<small class="label" for="input"><?php echo __('State/Province') ?></small>
+                    <select id="company_province_id" name="company[province_id]" title="<?php /* @escapeNotVerified */ echo __('State/Province') ?>" class="validate-select" <?php echo(!$block->getConfig('general/region/display_all')) ? ' disabled="disabled"' : '';?>>
+	                    <option value=""><?php /* @escapeNotVerified */ echo __('Please select a region, state or province.') ?></option>
+	                </select>
+	                <small class="label" for="input"><?php echo __('State/Province') ?></small>
+	                <input type="text" id="company_province" name="company[province]" value="<?php echo $block->escapeHtml($helper->getRetailerKitToolsConfig('company','company_state')) ?>"  title="<?php /* @escapeNotVerified */ echo __('State/Province') ?>" class="input-text required-entry "<?php echo(!$block->getConfig('general/region/display_all')) ? ' disabled="disabled"' : '';?>/>
+	                </div>
+			</div>
+		</div>
+	</div>
+	<div class="section-upload col-md-4">
+		<div class="muted-box-container--logo-upload muted-box-container">
+		  <div class="muted-box__content">
+		      <div class="muted-box__icon-container">
+		        <img class="announcement-image" style="max-width:200px; max-height:200px; width: auto; height: auto;" src="<?php echo $imgPath; ?>" alt="">
+		      </div>		      
+		          <p><?php echo __('Add your logo by browsing from your device. (allow png, gif, jpeg, jpg)') ?></p>
+		          <input type="file" name="company_logo" class="file-upload">
+		          <input type="text" name="company_logo" class="hidden" value="<?php echo $imgPath ?>">
+		  </div>
+		</div>
+	</div>  
+</div>
+
+<div class="form-section col-md-12">
+	<div class="form-header">
+		<h3 class="form-header__heading"><?php echo __('Enter customer and invoice information') ?></h3>    
+		<div class="form-header__status step-counter">
+			<span class="step-counter__label heading--5"><?php echo __('Step 2 of 3') ?></span>
+			<span class="step-counter__dots dots-container">
+				<span class="dots-container__dot dots-container__dot--active"></span>
+				<span class="dots-container__dot dots-container__dot--active"></span>
+				<span class="dots-container__dot "></span>
+			</span>
+		</div>
+    </div>
+	<div class="section-input-field col-md-12">
+		<div class="form-input-inline">
+			<div class="form-group col-md-4">				
+				<small class="label" for="input"><?php echo __('Your customer\'s name') ?></small>
+				<input type="text" name="customer[customer_name]" id="customer_name" class="form-control required-entry " placeholder="<?php echo __('Your customer\'s name') ?>">
+			</div>
+			<div class="form-group col-md-4">				
+				<small class="label" for="input"><?php echo __('Your customer\'s email') ?></small>
+				<input type="text" name="customer[customer_email]" id="customer_email" class="form-control required-entry  validate-email" placeholder="<?php echo __('Your customer\'s email') ?>">
+			</div>
+			<div class="form-group col-md-4">				
+				<small class="label" for="input"><?php echo __('Invoice number') ?></small>
+				<input type="text" name="invoice_number" id="invoice_number" value="" class="form-control required-entry" placeholder="<?php echo __('Invoice number') ?>">
+		  	</div>
+		</div>
+	</div>
+	<div class="section-input-field col-md-12">
+		<div class="form-input-inline">
+			<div class="form-group col-md-8">				
+				<small class="label" for="input"><?php echo __('Customer\'s address') ?></small>
+				<input type="text" name="customer[address]" id="customer_address" class="form-control required-entry" placeholder="<?php echo __('Customer\'s address') ?>">
+			</div>
+			<div class="form-group col-md-4">				
+				<small class="label" for="input"><?php echo __('Invoice date') ?></small>
+		  		<input type="text" name="invoice_date" id="invoice_date" value="<?php echo date("Y-m-d")?>" class="form-control required-entry" placeholder="<?php echo __('Invoice date') ?>">
+	  		</div>
+		</div>
+	</div>
+	<div class="section-input-field col-md-12">
+		<div class="form-input-inline">
+			<div class="form-group col-md-4">				
+				<small class="label" for="input"><?php echo __('City') ?></small>
+				<input type="text" name="customer[city]" id="customer_city" class="form-control required-entry" placeholder="<?php echo __('City') ?>">
+			</div>
+			<div class="form-group col-md-4">				
+				<small class="label" for="input"><?php echo __('Zip/postal code') ?></small>
+				<input type="text" name="customer[zip]" id="customer_zip" class="form-control required-entry" placeholder="<?php echo __('Zip/postal code') ?>">
+			</div>
+		</div>
+	</div>
+	<div class="section-input-field col-md-12">
+		<div class="form-input-inline">
+			<div class="form-group col-md-4">
+				<small class="label" for="input"><?php echo __('Country') ?></small>
+				<?php echo $this->getCountryHtmlSelectForCustomer() ?>
+			</div>
+			<div class="form-group col-md-4">
+				<div class="input-box">
+					<select id="customer_province_id" name="customer[province_id]" title="<?php /* @escapeNotVerified */ echo __('State/Province') ?>" class="validate-select" <?php echo(!$block->getConfig('general/region/display_all')) ? ' disabled="disabled"' : '';?>>
+	                    <option value=""><?php /* @escapeNotVerified */ echo __('Please select a region, state or province.') ?></option>
+	                </select>
+	                <small class="label" for="input"><?php echo __('State/Province') ?></small>
+	                <input type="text" id="customer_province" name="customer[province]" value="<?php echo $block->escapeHtml($block->getRegion()) ?>"  title="<?php /* @escapeNotVerified */ echo __('State/Province') ?>" class="input-text required-entry <?php /* @escapeNotVerified */ echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('region') ?>"<?php echo(!$block->getConfig('general/region/display_all')) ? ' disabled="disabled"' : '';?>/>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
+<div class="form-section col-md-12">
+	<div class="form-header">
+		<h3 class="form-header__heading"><?php echo __('Enter the items you wish to bill') ?></h3>    
+		<div class="form-header__status step-counter">
+		    <span class="step-counter__label heading--5"><?php echo __('Step 3 of 3') ?></span>
+		    <span class="step-counter__dots dots-container">
+		        <span class="dots-container__dot dots-container__dot--active"></span>
+		        <span class="dots-container__dot dots-container__dot--active"></span>
+		        <span class="dots-container__dot dots-container__dot--active"></span>
+		    </span>
+		</div>
+	</div>
+	<div class="section-input-field col-md-12">
+		<div class="form-inline line-item js-line-item">
+			<div class="form-group col-md-3">				
+				<small class="label" for="input"><?php echo __('Item') ?></small>
+			    <input type="text" name="line_items[0][title]" id="line_items_0__title" class="form-control required-entry" placeholder="<?php echo __('Item') ?>">
+			</div>
+			<div class="form-group col-md-5">				
+				<small class="label" for="input"><?php echo __('Description') ?></small>
+			    <input type="text" name="line_items[0][description]" id="line_items_0__description" class="form-control" placeholder="<?php echo __('Description') ?>">
+			</div>
+			<div class="form-group col-md-1">				
+				<small class="label" for="input"><?php echo __('Qty') ?></small>
+			    <input type="text" name="line_items[0][quantity]" id="line_items_0__quantity" class="form-control required-entry validate-greater-than-zero" placeholder="<?php echo __('Qty') ?>" onkeyup="updateLineTotal(this, 0)">
+			</div>
+			<div class="form-group col-md-1">				
+				<small class="label" for="input"><?php echo __('Price') ?></small>
+			    <input type="text" name="line_items[0][price]" id="line_items_0__price" class="form-control required-entry validate-greater-than-zero" placeholder="<?php echo __('Price') ?>" onkeyup="updateLineTotal(this, 0)">
+			</div>
+			<div class="form-group col-md-1">
+			  	<div class="line-item__amount col-md-1">
+				    <span class="marketing-label"><?php echo __('Amount') ?></span>
+				    <input type="text" name="line_items[0][amount]" id="line_items_0__amount" class="form-control hidden">
+				    <div class="heading--4 line-item__amount__total js-line-item-amount" id="js-line-item-amount-0">-</div>
+				    <div class="heading--4 line-item__amount__total js-line-item-amount-hidden hidden" id="js-line-item-amount-hidden-0"></div>
+			  	</div>
+			</div>
+			<div class="form-group col-md-1">
+			  	<button type="button" class="line-item__remove btn btn-default" onclick="removeItem(this)">
+				    <?php echo __('Remove line item') ?>
+			  	</button>
+			</div>
+		</div>			
+	</div>
+	<div class="line-item__add col-md-12">    
+		<button type="button" class="js-line-item-trigger btn btn-default" id="AddLineItem" data-index="1">
+			<?php echo __('Add a line item') ?>
+		</button>
+	</div>
+</div>
+
+<div class="form-section col-md-12">
+	<div class="note-memo col-md-8">
+		<div class="form-group">
+			<label class=""><?php echo __('Notes / Memo') ?></label>
+			<textarea name="notes" id="notes" class="form-control"></textarea>
+		</div>
+	</div>
+	<div class="total-review col-md-4">
+		<div class="summary-grid">
+			<div class="summary-grid__items col-md-12">
+				<div class="summary-grid__row">
+					<h5 class="summary-grid__label col-md-8"><?php echo __('Subtotal') ?></h5>					
+				    <input type="text" name="subtotal" id="subtotal" min="0" data-parsley-type="number" class="form-control hidden">
+					<span id="SubTotal" class="heading--4 summary-grid__value col-md-4">-</span>
+				</div>
+				<div class="summary-grid__row">
+					<div class="tax-label col-md-8">
+				    <span class="tax-label"><?php echo __('Tax') ?><span id="rate-number"><?php echo __('(13%)')?></span></span>
+				    <button type="button" class="btn btn-default" id="EditTaxButton"><?php echo __('Edit') ?></button>
+				    </div>
+					<span id="Tax" class="heading--4 summary-grid__value col-md-4">-</span>
+				</div>
+				<div id="TaxInputContainer" class="hidden col-md-12">
+					<label class="marketing-input-wrapper"><?php echo __('Tax rate') ?></label>
+					<input type="text" name="tax_rate" id="TaxRate" value="13" class="" placeholder="Tax rate">
+				</div>
+			</div>			
+			<div class="summary-grid__total col-md-12">
+				<h5 class="summary-grid__label col-md-8"><?php echo __('Total') ?>
+				</h5>
+				<span id="Total" class="heading--3 summary-grid__value col-md-4">-</span>
+			</div>
+		</div>
+	    <div class="total-footer__submit-container col-md-12">
+	        <input type="submit" name="commit" value="Submit" class="btn btn-primary">
+	        <!-- <p><?php //echo __('Print the invoice.') ?></p> -->
+	    </div>
+	</div>
+</div>
+
+</form>
+  </div>
+</section>
+<script type="text/x-magento-init">
+    {
+        "#company_country": {
+            "regionUpdater": {
+                "optionalRegionAllowed": <?php /* @escapeNotVerified */ echo($block->getConfig('general/region/display_all') ? 'true' : 'false'); ?>,
+                "regionListId": "#company_province_id",
+                "regionInputId": "#company_province",
+                "postcodeId": "#company_zipcode",
+                "form": "#form-validate",
+                "regionJson": <?php /* @escapeNotVerified */ echo $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>,
+                "defaultRegion": "<?php /* @escapeNotVerified */ echo $block->getRegionId() ?>",
+                "countriesWithOptionalZip": <?php /* @escapeNotVerified */ echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>
+            }
+        },
+        "#customer_country": {
+            "regionUpdater": {
+                "optionalRegionAllowed": <?php /* @escapeNotVerified */ echo($block->getConfig('general/region/display_all') ? 'true' : 'false'); ?>,
+                "regionListId": "#customer_province_id",
+                "regionInputId": "#customer_province",
+                "postcodeId": "#customer_zip",
+                "form": "#form-validate",
+                "regionJson": <?php /* @escapeNotVerified */ echo $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>,
+                "defaultRegion": "<?php /* @escapeNotVerified */ echo $block->getRegionId() ?>",
+                "countriesWithOptionalZip": <?php /* @escapeNotVerified */ echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>
+            }
+        }
+    }
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+    // var formId = 'InvoiceGeneratorForm';
+    // var myForm = new VarienForm(formId, true);
+    // var postUrl = '<?php echo $this->getUrl("retailerkittools/index/printinvoice") ?>';
+    // function doAjax() {
+    //     if (myForm.validator.validate()) {
+    //         new Ajax.Updater(
+    //             { success:'formSuccess' }, postUrl, {
+    //                 method:'post',
+    //                 asynchronous:true,
+    //                 evalScripts:false,
+    //                 onComplete:function(request, json) {
+    //                 	if (request.responseText.isJSON()) {
+		  //                   var res = request.responseText.evalJSON();
+		  //                   var printContents = res.html;
+				// 		    var originalContents = document.body.innerHTML;
+
+				// 		    document.body.innerHTML = printContents;
+
+				// 		    window.print();
+
+				// 		    document.body.innerHTML = originalContents;
+		  //               }                    
+    //                 },
+    //                 onLoading:function(request, json){
+    //                 },
+    //                 parameters: $(formId).serialize(true),
+    //             }
+    //         );
+    //     }
+    // }
+    
+    // new Event.observe(formId, 'submit', function(e){
+    //     e.stop();
+    //     doAjax();
+    // });
+
+	// var invoiceForm = new VarienForm('InvoiceGeneratorForm');
+   
+//]]>
+require([
+"jquery",
+"mage/calendar",
+'mage/validation'
+], function($){
+    var dataForm = $('#form-validate');
+    var ignore = null;
+
+    dataForm.mage('validation', {
+        ignore: ignore ? ':hidden:not(' + ignore + ')' : ':hidden'
+    }).find('input:text').attr('autocomplete', 'off');
+
+    // $('button#my-button').click( function() { //can be replaced with any event
+    //     dataForm.validation('isValid'); //validates form and returns boolean
+    // });
+  $('#invoice_date').datepicker({
+       prevText: '&#x3c;zurück', prevStatus: '',
+        prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '',
+        nextText: 'Vor&#x3e;', nextStatus: '',
+        nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '',
+        monthNames: ['Januar','Februar','März','April','Mai','Juni',
+        'Juli','August','September','Oktober','November','Dezember'],
+        monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
+        'Jul','Aug','Sep','Okt','Nov','Dez'],
+        dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
+        dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+        dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+      showMonthAfterYear: false,
+      dateFormat:'yy-mm-dd'
+    } 
+  );
+$('#AddLineItem').click(function(){
+	var el = $(this);
+	var inputs = el.parent().prev('.section-input-field');
+	inputs.append('<div class="form-inline line-item js-line-item"><div class="form-group col-md-3"><small class="label" for="input"><?php echo __('Item') ?></small><input type="text" name="line_items['+el.attr('data-index')+'][title]" id="line_items_'+el.attr('data-index')+'__title" class="form-control required-entry" placeholder="<?php echo __('Item') ?>" onkeyup="showlabel(this)"></div><div class="form-group col-md-5"><small class="label" for="input"><?php echo __('Description') ?></small><input type="text" name="line_items['+el.attr('data-index')+'][description]" id="line_items_'+el.attr('data-index')+'__description" class="form-control" placeholder="<?php echo __('Description') ?>" onkeyup="showlabel(this)"></div><div class="form-group col-md-1"><small class="label" for="input"><?php echo __('Qty') ?></small><input type="text" name="line_items['+el.attr('data-index')+'][quantity]" id="line_items_'+el.attr('data-index')+'__quantity" class="form-control required-entry validate-greater-than-zero" placeholder="<?php echo __('Qty') ?>" onkeyup="updateLineTotal(this,'+el.attr('data-index')+')"></div><div class="form-group col-md-1"><small class="label" for="input"><?php echo __('Price') ?></small><input type="text" name="line_items['+el.attr('data-index')+'][price]" id="line_items_'+el.attr('data-index')+'__price" class="form-control required-entry validate-greater-than-zero" placeholder="<?php echo __('Price') ?>" onkeyup="updateLineTotal(this,'+el.attr('data-index')+')"></div><div class="form-group col-md-1"><div class="line-item__amount col-md-1"><span class="marketing-label"><?php echo __('Amount') ?></span><input type="text" name="line_items['+el.attr('data-index')+'][amount]" id="line_items_'+el.attr('data-index')+'__amount" min="0" data-parsley-type="number" class="form-control required-entry hidden" placeholder="<?php echo __('Amount') ?>"><div class="heading--4 line-item__amount__total js-line-item-amount" id="js-line-item-amount-'+el.attr('data-index')+'">-</div><div class="heading--4 line-item__amount__total js-line-item-amount-hidden hidden" id="js-line-item-amount-hidden-'+el.attr('data-index')+'"></div></div></div><div class="form-group col-md-1"><button type="button" class="line-item__remove btn btn-default" onclick="removeItem(this)"><?php echo __('Remove line item') ?></button></div></div>'
+	);
+	el.attr('data-index', Number.parseInt(el.attr('data-index'))+1);
+});
+
+removeItem = function(el){
+	el.closest('.js-line-item').remove();
+	updateTotal();
+}
+updateLineTotal = function(el, index){
+	var amount = 0;
+	var subtotal = 0;
+	var qty = 0;
+	var price = 0;
+	var symbol = '<span class="symbol">'+$('#currencies').val()+'</span>';
+	if($('#line_items_'+index+'__quantity').val())
+		qty = Number.parseInt($('#line_items_'+index+'__quantity').val());
+	if($('#line_items_'+index+'__price').val())
+		price = Number.parseFloat($('#line_items_'+index+'__price').val());
+	amount = qty * price;
+	$('#line_items_'+index+'__amount').val(amount);
+	$('#js-line-item-amount-'+index).html(symbol+amount.toLocaleString());
+	$('#js-line-item-amount-hidden-'+index).html(amount);
+	if($(el).val().length > 0){
+		$(el).prev('.label').css('opacity','1');
+	}else{
+		$(el).prev('.label').css('opacity','0');
+	}
+	updateTotal();
+}
+updateTotal = function(){
+	var subtotal = 0;
+	var taxrate = 0;
+	var tax = 0;
+	var symbol = '<span class="symbol">'+$('#currencies').val()+'</span>';
+	$('.js-line-item-amount-hidden').each(function(){
+		var el = $(this);
+		var linetotal = 0;
+		if(!isNaN(Number.parseFloat(el.html())))
+			linetotal = Number.parseFloat(el.html());
+		subtotal += linetotal;
+	});	
+	taxrate = Number.parseFloat($('#TaxRate').val()/100); 
+	tax = Number(Math.round((subtotal * taxrate)+'e'+2)+'e-'+2);
+	$('#Tax').html(symbol+tax.toLocaleString());
+	$('#SubTotal').html(symbol+subtotal.toLocaleString());
+	$('#subtotal').val(subtotal);
+	$('#Total').html(symbol+Number(Math.round((tax+subtotal)+'e'+2)+'e-'+2).toLocaleString());
+}
+
+showlabel = function(el){
+	if($(el).val().length > 0){
+		$(el).prev('.label').css('opacity','1');
+	}else{
+		$(el).prev('.label').css('opacity','0');
+	}
+}
+
+$('#EditTaxButton').click(function(event){
+	if($('#TaxInputContainer').hasClass('hidden')){
+		$('#TaxInputContainer').removeClass('hidden');
+		$('#EditTaxButton').html('Close');
+	}else{
+		$('#TaxInputContainer').addClass('hidden');	
+		$('#EditTaxButton').html('Edit');	
+	}
+});
+$('#TaxRate').keyup(function(){
+	var el = $(this);
+	$('#rate-number').html('('+el.val()+'%)');
+	updateTotal();
+});
+$('.form-control').each(function(){
+	var el = $(this);
+	if(el.val().length > 0){
+		el.prev('.label').css('opacity','1');
+	}
+	el.keyup(function(e) {
+		if(el.val().length > 0){
+			el.prev('.label').css('opacity','1');
+		}else{
+			el.prev('.label').css('opacity','0');
+		}
+	});
+});
+
+changeCurrency = function(el){
+	var currency = $(el).val();
+	$('.symbol').each(function(){
+		$(this).html(currency);
+	});
+}
+
+});
+</script>

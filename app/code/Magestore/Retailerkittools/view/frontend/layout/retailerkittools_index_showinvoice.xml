@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+  <head>
+      <css src="Magestore_Retailerkittools::css/bootstrap.min.css" />
+      <css src="Magestore_Retailerkittools::css/retailerkittools.css" />
+    </head>
+  <body>
+    <referenceContainer name="header.container" remove="true" />
+    <referenceBlock name="catalog.topnav" remove="true"/>
+    <referenceContainer  name="footer-container" remove="true" />
+    <referenceBlock name="copyright" remove="true"/>
+    <referenceContainer name="content">
+      <block class="Magento\Framework\View\Element\Template" name="index.index" template="Magestore_Retailerkittools::showinvoice.phtml"/>
+    </referenceContainer>
+  </body>
+</page>

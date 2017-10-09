@@ -1,0 +1,88 @@
+<div class="container">
+<section class="section section--border" id="ToolContent">
+<div class="title-section">
+  <div class="section-heading">
+    <h1 style="text-transform: uppercase;"><?php echo __('Retailer Kit Tool')?></h1>
+    <p>Manage your retail business better!</p>
+</div>
+</div>
+    <div class="section-block col-md-12">
+        <div class="items col-md-12">
+            <div class="tool-item col-md-4">
+                <div class="block tools-grid-item grid-item--flush-third grid-item--bordered text-center gutter-bottom--reset">
+                    <img src="<?php echo $block->getViewFileUrl('Magestore_Retailerkittools::images/retailerkittool/invoice.png') ?>">
+                    <h3 class="block__heading heading--4">Invoice Generator</h3>
+                    <p class="block__content hide--mobile">
+                    Branded invoice template.<br>
+                    Automatically calculates taxes and totals
+                    </p>
+                    <a href="<?php echo $this->getAdminUrl()->getUrl('retailerkittools/index/invoicegenerator')?>">
+                        <?php echo __('Create your invoice')?>
+                    </a>
+                </div>            	
+    		</div>
+    		<div class="tool-item col-md-4">
+                <div class="block tools-grid-item grid-item--flush-third grid-item--bordered text-center gutter-bottom--reset">
+                    <img src="<?php echo $block->getViewFileUrl('Magestore_Retailerkittools::images/retailerkittool/order.png') ?>">
+                    <h3 class="block__heading heading--4">Purchase Order Template</h3>
+                    <p class="block__content hide--mobile">Make instant transaction with vendor selected from list</p>
+                    <a href="<?php echo $this->getAdminUrl()->getUrl('retailerkittools/index/purchaseorder')?>">
+                        <?php echo __('Create your purchase order')?>
+                    </a>
+                </div>        	
+    		</div>
+    		<div class="tool-item col-md-4">
+                <div class="block tools-grid-item grid-item--flush-third grid-item--bordered text-center gutter-bottom--reset">
+                    <img src="<?php echo $block->getViewFileUrl('Magestore_Retailerkittools::images/retailerkittool/shippinglabel.png') ?>">
+                    <h3 class="block__heading heading--4">Shipping Label Template</h3>
+                    <p class="block__content hide--mobile">
+                        Fast label for your shipped items.<br>
+                        Barcode is available
+                    </p>
+                    <a href="<?php echo $this->getAdminUrl()->getUrl('retailerkittools/index/printshippinglabel')?>">
+                        <?php echo __('Shipping Label Printer')?>
+                    </a>
+                </div>        	
+    		</div>
+        </div>
+        <div class="items col-md-12">
+    		<div class="tool-item col-md-4">
+                <div class="block tools-grid-item grid-item--flush-third grid-item--bordered text-center gutter-bottom--reset">
+                    <img src="<?php echo $block->getViewFileUrl('Magestore_Retailerkittools::images/retailerkittool/barcode.png') ?>">
+                    <h3 class="block__heading heading--4">Barcode Generator</h3>
+                    <p class="block__content hide--mobile">Generate printable and scan-able barcode for your products</p>
+                    <a href="<?php echo $this->getAdminUrl()->getUrl('retailerkittools/index/makebarcode')?>">
+                        <?php echo __('Barcode Maker')?>
+                    </a>
+                </div>        	
+    		</div>
+    		<div class="tool-item col-md-4">
+                <div class="block tools-grid-item grid-item--flush-third grid-item--bordered text-center gutter-bottom--reset">
+                    <img src="<?php echo $block->getViewFileUrl('Magestore_Retailerkittools::images/retailerkittool/calculate.png') ?>">
+                    <h3 class="block__heading heading--4">PayPal Fee Calculator</h3>
+                    <p class="block__content hide--mobile">Be aware of Paypal hidden fee for funds received</p>
+                    <a href="<?php echo $this->getAdminUrl()->getUrl('retailerkittools/index/calcpaypalfee')?>">
+                        <?php echo __('Calculate Paypal Fee')?>
+                    </a>
+                </div>
+            </div>
+            <div class="tool-item col-md-4">
+                <div class="block tools-grid-item grid-item--flush-third grid-item--bordered text-center gutter-bottom--reset">
+                    <img src="<?php echo $block->getViewFileUrl('Magestore_Retailerkittools::images/retailerkittool/logo_magestore.png') ?>">
+                    <div class="magestore_retailerkit" style="text-align: left; margin-top: 10px">
+                    <p class="block__content hide--mobile">With Retailer Kit - A native omnichannel solution for Magento, you can: </p>
+                    <p>
+                        - Boost sales online & In-store <br>
+                        - Control inventory visibility across channels in a single-view <br>
+                        - Scale up your business easily
+                    </p>
+                    </div>
+                    <a href="https://www.magestore.com/retailer-kit.html/" target="_blank">
+                        <?php echo __('Explore Retailer Kit now!')?>
+                    </a>
+                </div>
+            </div>
+		</div>
+    </div>
+</div>
+</section>

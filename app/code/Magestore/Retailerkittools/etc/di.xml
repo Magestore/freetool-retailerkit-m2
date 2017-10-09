@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<preference for="Magestore\Retailerkittools\Api\VendorRepositoryInterface" type="Magestore\Retailerkittools\Model\VendorRepository"/>
+	<preference for="Magestore\Retailerkittools\Api\Data\VendorInterface" type="Magestore\Retailerkittools\Model\Vendor"/>
+	<preference for="Magestore\Retailerkittools\Api\Data\VendorSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+	<virtualType name="Magestore\Retailerkittools\Model\ResourceModel\Vendor\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+		<arguments>
+			<argument name="mainTable" xsi:type="string">magestore_retailerkittools_vendor</argument>
+			<argument name="resourceModel" xsi:type="string">Magestore\Retailerkittools\Model\ResourceModel\Vendor\Collection</argument>
+		</arguments>
+	</virtualType>
+	<type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+		<arguments>
+			<argument name="collections" xsi:type="array">
+				<item name="magestore_retailerkittools_vendor_grid_data_source" xsi:type="string">Magestore\Retailerkittools\Model\ResourceModel\Vendor\Grid\Collection</item>
+			</argument>
+		</arguments>
+	</type>
+</config>
